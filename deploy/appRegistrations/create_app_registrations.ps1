@@ -49,7 +49,7 @@ function testSubscription {
     Write-Host "$Comment tenant: $accountName will be used"
 }
 
-$secretForWebApp = testParams
+testParams
 testSubscription
 
 Write-Host "$Emphasis -------------------------------------------------------------------------"
@@ -60,6 +60,13 @@ Write-Host "$Emphasis applicationName '$applicationName'"
 Write-Host "$Emphasis environment $environment"
 Write-Host "$Emphasis deploymentId $deploymentId"
 
+Write-Host "$Emphasis -------------------------------------------------------------------------"
+Write-Host "Required permission Ids can be found here: $Warning https://learn.microsoft.com/en-us/graph/permissions-reference#all-permissions-and-ids"
+Write-Host "Alternatively, the Resource permission Ids can be fetched by executing the following commands:"
+Write-Host $Warning '$graphId = az ad sp list --query "[?appDisplayName==''Microsoft Graph''].appId | [0]" --all'
+Write-Host "To get a specific permission Id, use this query:"
+Write-Host $Warning 'az ad sp show --id $graphId --query "appRoles[?value==''Mail.Send''].id | [0]"'
+Write-Host "$Emphasis -------------------------------------------------------------------------"
 
 # define the Key Vault Secret Names
 $KEY_VAULT_NAME = "kv-$applicationName-$environment-$deploymentId"
@@ -69,8 +76,6 @@ $teamsAppRegistrationAppIdName = "TeamsAppAzureAdApplicationAppId"
 $teamsAppRegistrationSecretName = "TeamsAppAzureAdApplicationClientSecret"
 $botAppRegistrationAppIdName = "AzureAdBotAppId"
 $botAppRegistrationSecretName = "AzureAdBotClientSecret"
-$notifyAppRegistrationAppIdName = "AzureAdNotifyAppId"
-$notifyAppRegistrationSecretName = "AzureAdNotifyClientSecret"
 
 # Create API App Registration
 # tenantId
@@ -107,6 +112,7 @@ az keyvault secret set --vault-name "$KEY_VAULT_NAME" -n $apiAppRegistrationSecr
 # app registration display name
 # scope name
 # deploymentId
+# wait time in seconds before applying admin consent permissions, if 0 then no admin consent is applied
 # is a Web App (e.g. requires a redirect URI)
 # appId of the API App Registration if requires API permission
 # scopeId of the API App Registration if requires API permission
@@ -118,6 +124,7 @@ $teamsAppRegResult = &".\teams_app_registration.ps1" `
     'Teams App UI' `
     'default' `
     $deploymentId `
+    0 `
     $true `
     $apiAppRegResult.appId `
     $apiAppRegResult.scopeId `
@@ -141,6 +148,7 @@ az keyvault secret set --vault-name "$KEY_VAULT_NAME" -n $teamsAppRegistrationSe
 # app registration display name
 # scope name
 # deploymentId
+# wait time in seconds before applying admin consent permissions, if 0 then no admin consent is applied
 $botAppRegResult = &".\teams_app_registration.ps1" `
     $tenantId `
     $applicationName `
@@ -149,6 +157,7 @@ $botAppRegResult = &".\teams_app_registration.ps1" `
     'Call Management Bot' `
     'access_as_user' `
     $deploymentId `
+    30 `
     | Select-Object -Last 1
 
 if (!$botAppRegResult) {
