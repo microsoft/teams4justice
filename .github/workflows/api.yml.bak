@@ -1,0 +1,163 @@
+name: API Build & Deploy (Original)
+
+on:
+  workflow_run:
+    workflows: ["Call Management Bot Build & Deploy"]
+    types:
+      - completed
+      - requested
+  push:
+    branches:
+      - main
+      - release/**
+    paths:
+      - ".github/workflows/api.yml"
+      - ".github/action/yarn-bundle-to-azure-deployment/**"
+      - "deploy/environments.yml"
+      - "deploy/deploy_app_service.sh"
+      - "deploy/deploy_webapp.sh"
+      - "src/api/**"
+      - "src/shared/**"
+      # - "terraform/api/**"
+      # - "terraform/api_post/**"
+      # - "terraform/modules/app_service/**"
+      # - "terraform/modules/event_grid_subscriptions/**"
+  workflow_dispatch:
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+env:
+  NODE_VERSION: "14.x"
+
+jobs:
+  api_build:
+    name: API Build
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    env:
+      TIME_ZONE_OPTIONS: ${{ vars.TIME_ZONE_OPTIONS }}
+      DEFAULT_TIME_ZONE: ${{ vars.DEFAULT_TIME_ZONE }}
+    outputs:
+      environment_matrix: ${{ steps.yaml2json.outputs.data }}
+    steps:
+      - name: Node Set up Environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+        with:
+          # Required for auto commit step
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.BUILD_MGR_PAT }}
+
+      - name: yarn install, build and test
+        working-directory: src/api
+        run: |
+          yarn install
+          yarn build
+
+      - name: Test the build
+        working-directory: src/api
+        run: |
+          yarn test
+
+      - name: Prepare artifacts folder
+        run: mkdir ~/artifacts
+
+      - name: Pack API
+        uses: ./.github/actions/yarn-bundle-to-azure-deployment
+        with:
+          source_folder: src/api
+          output_file: ~/artifacts/api_service.zip
+
+      - name: API artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: build_artifacts
+          path: ~/artifacts/
+      - name: YAML to JSON Converter
+        id: yaml2json
+        uses: fabasoad/yaml-json-xml-converter-action@v1.0.11
+        with:
+          path: deploy/environments.yml
+          from: yaml
+          to: json
+  api_deploy:
+    name: API Deploy
+    runs-on: ubuntu-latest
+    needs: ["api_build"]
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.api_build.outputs.environment_matrix) }}
+    environment:
+      name: dev
+    env:
+      #   ARM_CLIENT_ID: ${{ secrets[matrix.secretArmClientId] }}
+      #   ARM_CLIENT_SECRET: ${{ secrets[matrix.secretArmClientSecret] }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets[matrix.secretSubscriptionId] }}
+      #   ARM_TENANT_ID: ${{ secrets[matrix.secretTenantId] }}
+      ARM_SAS_TOKEN: ${{ secrets[matrix.secretStorageSAS] }}
+      ARM_CLIENT_ID: ${{ vars.CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ vars.CLIENT_SECRET }}
+      ARM_TENANT_ID: ${{ vars.TENANT_ID }}
+      TIME_ZONE_OPTIONS: ${{ vars.TIME_ZONE_OPTIONS }}
+      DEFAULT_TIME_ZONE: ${{ vars.DEFAULT_TIME_ZONE }}
+    steps:
+      - name: Checkout the repository
+        if: ${{ github.ref == matrix.pinnedRef }}
+        uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+        if: ${{ github.ref == matrix.pinnedRef }}
+        with:
+          name: build_artifacts
+          path: ~/artifacts/
+      # - name: Setup Terraform
+      #   uses: hashicorp/setup-terraform@v1
+      #   if: ${{ github.ref == matrix.pinnedRef }}
+      #   with:
+      #     terraform_version: 0.15.1
+      #     terraform_wrapper: false
+      # - name: Deploy Infrastructure
+      #   uses: ./.github/actions/run-terraform-deploy
+      #   if: ${{ github.ref == matrix.pinnedRef }}
+      #   with:
+      #     backendStorageAccountName: ${{ matrix.terraformBackendStorageAccountName }}
+      #     backendResourceGroupName: ${{ matrix.terraformResourceGroupName }}
+      #     backendStorageContainerName: ${{ matrix.terraformBackendStorageContainerName }}
+      #     backendStateFile: api.tfstate
+      #     backendKeyVaultSasTokenId: ${{ matrix.keyVaultSasTokenId }}
+      #     terraformWorkspace: ${{ matrix.environmentName }}
+      #     terraformPath: terraform/api
+      #     terraformLogs: ${{ vars.TF_LOG }}
+      #     terraformArgs: >
+      #       -var 'location=${{ matrix.location }}'
+      #       -var 'org_name=${{ matrix.orgName }}'
+      #       -var 'project_name=${{ matrix.projectName }}'
+      #       -var 'time_zone_options=${{ vars.TIME_ZONE_OPTIONS }}'
+      #       -var 'default_time_zone=${{ vars.DEFAULT_TIME_ZONE }}'
+      #       -var 'lock_resource_group=${{ vars.LOCK_RESOURCE_GROUP }}'
+      - name: Deploy Applications
+        if: ${{ github.ref == matrix.pinnedRef }}
+        run: |
+          az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+          chmod +x ./deploy/deploy_webapp.sh
+          chmod +x ./deploy/deploy_app_service.sh
+          ./deploy/deploy_webapp.sh -g rg-${{ matrix.orgName }}-${{ matrix.projectName }} -e ${{ matrix.environmentName }} -d ${{ matrix.deploymentId }} -b ${{ matrix.APIServiceName }} -a "~/artifacts/api_service.zip" -s "src/api/deploy/"
+      # - name: Deploy Event Grid Subscriptions
+      #   uses: ./.github/actions/run-terraform-deploy
+      #   if: ${{ github.ref == matrix.pinnedRef }}
+      #   with:
+      #     backendStorageAccountName: ${{ matrix.terraformBackendStorageAccountName }}
+      #     backendResourceGroupName: ${{ matrix.terraformResourceGroupName }}
+      #     backendStorageContainerName: ${{ matrix.terraformBackendStorageContainerName }}
+      #     backendStateFile: api_post.tfstate
+      #     backendKeyVaultSasTokenId: ${{ matrix.keyVaultSasTokenId }}
+      #     terraformWorkspace: ${{ matrix.environmentName }}
+      #     terraformPath: terraform/api_post
+      #     terraformArgs: >
+      #       -var 'location=${{ matrix.location }}'
+      #       -var 'org_name=${{ matrix.orgName }}'
+      #       -var 'project_name=${{ matrix.projectName }}'

@@ -1,0 +1,114 @@
+{
+  "name": "teamsapp",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@tfj/courtroom-management-api-client": "*",
+    "@tfj/shared": "*",
+    "@azure/identity": "^1.5.0",
+    "@fluentui/react-northstar": "^0.62.0",
+    "@microsoft/mgt-element": "^2.8.0",
+    "@microsoft/mgt-react": "^2.8.0",
+    "@microsoft/mgt-teamsfx-provider": "^2.8.0",
+    "@microsoft/microsoft-graph-client": "^3.0.1",
+    "@microsoft/teams-js": "^2.9.1",
+    "@microsoft/teamsfx": "^2.2.0",
+    "@microsoft/teamsfx-react": "^2.0.0",
+    "@microsoft/signalr": "^5.0.10",
+    "@nestjs/common": "^8.4.0",
+    "assert": "^2.0.0",
+    "axios": "^0.21.1",
+    "browserify-zlib": "^0.2.0",
+    "html-entities": "^2.3.2",
+    "https-browserify": "^1.0.0",
+    "jwt-decode": "^3.1.2",
+    "msteams-react-base-component": "^4.0.1",
+    "moment-timezone": "^0.5.35",
+    "os-browserify": "^0.3.0",
+    "path-browserify": "^1.0.1",
+    "react": "^16.8.0",
+    "react-app-rewired": "^2.1.8",
+    "react-big-calendar": "^0.33.6",
+    "react-dom": "^16.8.0",
+    "react-grid-layout": "^1.2.5",
+    "react-quill": "^2.0.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "^5.0.1",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "typescript": "^4.1.2",
+    "url": "^0.11.0",
+    "util": "^0.12.5",
+    "uuid": "^8.3.2",
+    "web-vitals": "^1.0.1",
+    "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.8.0",
+    "@types/react-big-calendar": "^0.33.1",
+    "@types/react-dom": "^16.8.0",
+    "@types/react-grid-layout": "^1.1.2",
+    "@types/react-router-dom": "^5.1.8",
+    "@types/uuid": "^8.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.4.1",
+    "cross-env": "^7.0.3",
+    "env-cmd": "^10.1.0",
+    "eslint": "^8.0.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.20.3",
+    "eslint-plugin-react-hooks": "^4.0.8",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.3.0",
+    "typescript": "^4.1.2"
+  },
+  "scripts": {
+    "dev:teamsfx": "env-cmd --silent -f .localSettings npm run start",
+    "lint:prettier": "prettier --check .",
+    "lint:prettier:fix": "prettier --write .",
+    "lint:eslint": "eslint .",
+    "lint:eslint:fix": "eslint --fix .",
+    "lint:fix": "run-s lint:prettier:fix lint:eslint:fix",
+    "lint": "run-s lint:prettier lint:eslint",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "build:tsc": "tsc -b",
+    "build:teamsfx": "cross-env-shell \"env-cmd -f .env.teamsfx.${TEAMS_FX_ENV} npm run build\"",
+    "build:teamsfx:dev": "cross-env TEAMS_FX_ENV=dev npm run build:teamsfx",
+    "test": "react-scripts test --watchAll=false",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "homepage": ".",
+  "jest": {
+    "testMatch": [
+      "**/*.spec.ts",
+      "**/*.test.tsx"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!(@fluentui/react-teams))"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.ts"
+    }
+  }
+}

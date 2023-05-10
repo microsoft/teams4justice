@@ -1,0 +1,15 @@
+{
+  "ignorePatterns": [
+    {
+      "pattern": "^http[s]?://localhost.*"
+    },
+    {
+      "pattern": "^http[s]?://.*vault.azure.net"
+    }
+  ],
+  "timeout": "20s",
+  "retryOn429": true,
+  "retryCount": 5,
+  "fallbackRetryDelay": "30s",
+  "aliveStatusCodes": [200, 206]
+}

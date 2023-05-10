@@ -1,0 +1,11 @@
+{
+  "environments": [
+    {
+      "applicationName": { "value": "contoso-t4j" },
+      "environment": { "value": "dev" },
+      "deploymentId": { "value": "001" },
+      "primaryRegion": { "value": "eastus2" },
+      "secondaryRegion": { "value": "westus" }
+    }
+  ]
+}

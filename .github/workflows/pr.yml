@@ -1,0 +1,89 @@
+name: PR Build
+
+on:
+  pull_request:
+    branches:
+      - main
+      - releases/**
+
+env:
+  APPLY_FIXES_MODE: commit
+  NODE_VERSION: "14.x"
+
+concurrency:
+  group: pr-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cancel_duplicates:
+    name: Cancel duplicate jobs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: fkirc/skip-duplicate-actions@master
+        with:
+          github_token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
+  pr_build:
+    name: Lint, Build and Test files
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+        with:
+          # Full git history is needed to get a proper list of changed files within `super-linter`
+          fetch-depth: 0
+          token: ${{ secrets.BUILD_MGR_PAT }}
+
+      - name: Node Set up Environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: yarn install
+        working-directory: src/
+        run: |
+          yarn install
+
+      # - name: Mega-linter
+      #   uses: megalinter/megalinter/flavors/javascript@v5.10.0
+      #   id: ml
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     VALIDATE_ALL_CODEBASE: false
+
+      # - name: Prepare Mega-Linter fixes commit
+      #   if: steps.ml.outputs.has_updated_sources == 1 && env.APPLY_FIXES_MODE == 'commit' && github.ref != 'refs/heads/main' && github.event.pull_request.head.repo.full_name == github.repository
+      #   run: sudo chown -Rc $UID .git/
+
+      # - name: Commit and push applied Mega-Linter fixes
+      #   if: steps.ml.outputs.has_updated_sources == 1 && env.APPLY_FIXES_MODE == 'commit' && github.ref != 'refs/heads/main' && github.event.pull_request.head.repo.full_name == github.repository
+      #   uses: stefanzweifel/git-auto-commit-action@v4
+      #   with:
+      #     branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
+      #     commit_message: "[Mega-Linter] Apply linters fixes"
+
+      - name: Install Azure Functions Dependency
+        run: npm i -g azure-functions-core-tools@3 --unsafe-perm true
+
+      - name: yarn lint
+        working-directory: src/
+        run: yarn workspaces foreach run lint
+
+      - name: yarn build and test
+        env:
+          TIME_ZONE_OPTIONS: ${{ vars.TIME_ZONE_OPTIONS }}
+          DEFAULT_TIME_ZONE: ${{ vars.DEFAULT_TIME_ZONE }}
+          REACT_APP_TIME_ZONE_OPTIONS: ${{ vars.TIME_ZONE_OPTIONS }}
+          REACT_APP_DEFAULT_TIME_ZONE: ${{ vars.DEFAULT_TIME_ZONE }}
+        working-directory: src/
+        run: |
+          yarn build
+          yarn test
+
+      - name: Auto commit swagger changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
+          commit_message: "Apply swagger doc changes"
+          file_pattern: src/api/swagger.json

@@ -1,0 +1,6 @@
+{
+  "jest.autoEnable": false,
+  "markdownlint.config": {
+    "extends": "../.github/linters/.markdown-lint.yml"
+  }
+}

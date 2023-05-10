@@ -1,0 +1,72 @@
+{
+  "name": "call-management-bot",
+  "version": "0.1.0",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build:extensions": "func extensions sync",
+    "build:tsc": "tsc -b",
+    "build": "run-s build:extensions build:tsc",
+    "clean:dist": "rimraf dist",
+    "clean:misc": "rimraf yarn-error.log",
+    "clean": "run-p clean:dist clean:misc",
+    "lint:prettier": "prettier --check .",
+    "lint:prettier:fix": "prettier --write .",
+    "lint:eslint": "eslint .",
+    "lint:eslint:fix": "eslint --fix .",
+    "lint:fix": "run-s lint:prettier:fix lint:eslint:fix",
+    "lint": "run-s lint:prettier lint:eslint",
+    "start:host": "func start",
+    "start": "run-p start:host watch",
+    "test": "jest",
+    "test:verbose": "jest --verbose",
+    "test:cov": "jest --coverage",
+    "watch": "tsc --w"
+  },
+  "devDependencies": {
+    "@azure/functions": "^1.2.3",
+    "@microsoft/microsoft-graph-types": "^2.0.0",
+    "@types/jest": "26.0.23",
+    "@types/jsonwebtoken": "^8.5.4",
+    "@types/qs": "^6.9.7",
+    "@typescript-eslint/eslint-plugin": "^4.4.1",
+    "@typescript-eslint/parser": "^4.22.0",
+    "eslint": "^7.24.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-plugin-import": "^2.22.0",
+    "jest": "26.6.0",
+    "jest-mock-extended": "^2.0.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.3.0",
+    "rimraf": "^3.0.2",
+    "ts-jest": "26.5.6",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {
+    "@tfj/shared": "*",
+    "@azure/core-http": "^2.2.0",
+    "@azure/eventgrid": "^4.3.0",
+    "@azure/identity": "^1.5.0",
+    "@microsoft/microsoft-graph-client": "^2.2.1",
+    "applicationinsights": "^2.1.3",
+    "azure-ad-verify-token": "^1.1.2",
+    "durable-functions": "^1.5.1",
+    "isomorphic-fetch": "^3.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "qs": "^6.11.1",
+    "tslib": "^2.2.0",
+    "uuid": "^8.3.2",
+    "winston": "^3.3.3"
+  },
+  "jest": {
+    "coverageDirectory": "./coverage",
+    "collectCoverageFrom": [
+      "**/*.ts",
+      "!dist/**"
+    ],
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/*.spec.ts"
+    ]
+  }
+}

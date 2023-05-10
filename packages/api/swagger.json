@@ -1,0 +1,2415 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "api",
+    "description": "",
+    "version": "0.1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "ActiveHearingSummaryModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the hearing"
+          },
+          "caseName": {
+            "type": "string",
+            "description": "The name of the case associated with the hearing"
+          },
+          "courtId": {
+            "type": "string",
+            "description": "The unique identifier of the court associated with the hearing"
+          },
+          "courtroomId": {
+            "type": "string",
+            "description": "The unique identifier of the courtroom associated with the hearing"
+          },
+          "terminologySetId": {
+            "type": "string",
+            "description": "The terminology set used in the hearing"
+          }
+        },
+        "required": [
+          "id",
+          "caseName",
+          "courtId",
+          "courtroomId"
+        ]
+      },
+      "CaseSummaryModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the case"
+          },
+          "organisationId": {
+            "type": "string",
+            "description": "The unique identifier of the organisation associated with the case"
+          },
+          "caseNo": {
+            "type": "string",
+            "description": "The case number"
+          },
+          "activeHearing": {
+            "description": "The hearing that is currently in session. Undefined if no active hearing.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ActiveHearingSummaryModel"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "organisationId",
+          "caseNo"
+        ]
+      },
+      "OnlineMeetingParticipantIdentityModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of this online meeting participant"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "The display name of this online meeting participant"
+          }
+        },
+        "required": [
+          "id",
+          "displayName"
+        ]
+      },
+      "RoomParticipantModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the room participant"
+          },
+          "organisationId": {
+            "type": "string",
+            "description": "The unique identifier of the organisation associated with the room participant"
+          },
+          "caseId": {
+            "type": "string",
+            "description": "The unique identifier of the case associated with the room participant"
+          },
+          "normalisedParticipantId": {
+            "type": "string",
+            "description": "The normalised unique identifier of the room participant"
+          },
+          "participantIdentity": {
+            "description": "The identity object for the room participant ",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OnlineMeetingParticipantIdentityModel"
+              }
+            ]
+          },
+          "participantParty": {
+            "type": "string",
+            "description": "The participant party of the room participant"
+          },
+          "roomOnlineMeetingId": {
+            "type": "string",
+            "description": "The room online meeting identifier of the room participant"
+          },
+          "status": {
+            "type": "string",
+            "description": "The current status of the room participant"
+          },
+          "hearingId": {
+            "type": "string",
+            "description": "The unique identifier of the hearing associated with the room participantThis value is null if the participant is in a case room."
+          },
+          "currentRoomId": {
+            "type": "string",
+            "description": "The unique identifier of the room the room participant is currently in. This value is null if the participant is in a case room."
+          },
+          "assignedRoomId": {
+            "type": "string",
+            "description": "The unique identifier of the room assigned to the room participant"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "The display name of the room participant"
+          }
+        },
+        "required": [
+          "id",
+          "organisationId",
+          "caseId",
+          "normalisedParticipantId",
+          "participantIdentity",
+          "roomOnlineMeetingId",
+          "status",
+          "hearingId"
+        ]
+      },
+      "CaseRoomParticipantModel": {
+        "type": "object",
+        "properties": {
+          "participant": {
+            "description": "Case room participant for this meeting",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RoomParticipantModel"
+              }
+            ]
+          },
+          "assignedRoomName": {
+            "type": "string",
+            "description": "Assigned room for this participant"
+          }
+        },
+        "required": [
+          "participant"
+        ]
+      },
+      "SendMessageRequestModel": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Message to be sent to the meeting room"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "JudgeInfoModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of this judge"
+          },
+          "title": {
+            "type": "string",
+            "description": "The formal title of this judge"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "The first name of this judge"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "The last name of this judge"
+          },
+          "email": {
+            "type": "string",
+            "description": "The email address of this judge"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "CourtroomSummaryModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the courtroom"
+          },
+          "courtId": {
+            "type": "string",
+            "description": "The unique identifier of the court associated with the courtroom"
+          },
+          "organisationId": {
+            "type": "string",
+            "description": "The unique identifier of the organisation associated with the courtroom"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the courtroom"
+          },
+          "presidingJudges": {
+            "description": "The judge(s) presiding over the courtroom",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JudgeInfoModel"
+            }
+          },
+          "msGraphResourceUri": {
+            "type": "string",
+            "description": "The URI of the MS Graph resource associated with the courtroom"
+          },
+          "ianaTimeZoneId": {
+            "type": "string",
+            "description": "The default timezone for the courtroom"
+          }
+        },
+        "required": [
+          "id",
+          "courtId",
+          "organisationId",
+          "name",
+          "presidingJudges",
+          "ianaTimeZoneId"
+        ]
+      },
+      "CommsTemplateModel": {
+        "type": "object",
+        "properties": {
+          "templateUsage": {
+            "type": "string",
+            "description": "What the template is used for"
+          },
+          "templateMedium": {
+            "type": "string",
+            "description": "The medium of this template"
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the message"
+          },
+          "body": {
+            "type": "string",
+            "description": "The body of the message"
+          }
+        },
+        "required": [
+          "templateUsage",
+          "templateMedium",
+          "title",
+          "body"
+        ]
+      },
+      "HearingTimeBlockModel": {
+        "type": "object",
+        "properties": {
+          "startDateTime": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The start of this time block"
+          },
+          "endDateTime": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The end of this time block"
+          }
+        },
+        "required": [
+          "startDateTime",
+          "endDateTime"
+        ]
+      },
+      "CreateHearingParticipantModel": {
+        "type": "object",
+        "properties": {
+          "participantParty": {
+            "type": "string",
+            "description": "The party of the hearing participant"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "The display name of the hearing participant"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "The first name of the hearing participant"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "The last name of the hearing participant"
+          },
+          "email": {
+            "type": "string",
+            "description": "The email address of the hearing participant"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "The phone number of the hearing room participant"
+          }
+        },
+        "required": [
+          "participantParty",
+          "email"
+        ]
+      },
+      "CreateHearingModel": {
+        "type": "object",
+        "properties": {
+          "caseNo": {
+            "type": "string",
+            "description": "The external case number of the case associated with the hearing"
+          },
+          "caseName": {
+            "type": "string",
+            "description": "The name of the case associated with the hearing"
+          },
+          "ianaTimeZoneId": {
+            "type": "string",
+            "description": "The IANA identifier for the time zone of the hearing"
+          },
+          "assignedTimeBlock": {
+            "description": "The time block assigned to the hearing",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/HearingTimeBlockModel"
+              }
+            ]
+          },
+          "emailTemplateBody": {
+            "type": "string",
+            "description": "The email template body for this hearing"
+          },
+          "terminologySetId": {
+            "type": "string",
+            "description": "The unique identifier of the terminology set used in this hearing"
+          },
+          "participants": {
+            "description": "The list of participants in the hearing",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreateHearingParticipantModel"
+            }
+          }
+        },
+        "required": [
+          "caseNo",
+          "caseName",
+          "assignedTimeBlock",
+          "emailTemplateBody",
+          "participants"
+        ]
+      },
+      "HearingMessageModel": {
+        "type": "object",
+        "properties": {
+          "templateUsage": {
+            "type": "string",
+            "description": "What the template is used for"
+          },
+          "templateMedium": {
+            "type": "string",
+            "description": "The medium of this template"
+          },
+          "body": {
+            "type": "string",
+            "description": "The body of the message"
+          }
+        },
+        "required": [
+          "templateUsage",
+          "templateMedium",
+          "body"
+        ]
+      },
+      "HearingParticipantModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the hearing participant"
+          },
+          "hearingId": {
+            "type": "string",
+            "description": "The unique identifier of the hearing associated with the hearing participant"
+          },
+          "firstName": {
+            "type": "string",
+            "description": "The first name of the hearing participant"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "The last name of the hearing participant"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "The display name of the hearing participant"
+          },
+          "email": {
+            "type": "string",
+            "description": "The email address of the hearing participant"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "The phone number of the hearing room participant"
+          },
+          "participantParty": {
+            "type": "string",
+            "description": "The party of the hearing participant"
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of the object"
+          }
+        },
+        "required": [
+          "id",
+          "hearingId",
+          "email",
+          "participantParty",
+          "status"
+        ]
+      },
+      "HearingModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the hearing"
+          },
+          "caseId": {
+            "type": "string",
+            "description": "The unique identifier of the case associated with the hearing"
+          },
+          "caseNo": {
+            "type": "string",
+            "description": "The external case number of the case associated with the hearing"
+          },
+          "caseName": {
+            "type": "string",
+            "description": "The name of the case associated with the hearing"
+          },
+          "organisationId": {
+            "type": "string",
+            "description": "The unique identifier of the organisation associated with the hearing"
+          },
+          "courtId": {
+            "type": "string",
+            "description": "The unique identifier of the court associated with the hearing"
+          },
+          "courtroomId": {
+            "type": "string",
+            "description": "The unique identifier of the courtroom associated with the hearing"
+          },
+          "systemStatus": {
+            "type": "string",
+            "description": "The status of the object"
+          },
+          "hearingStatus": {
+            "type": "string",
+            "description": "The status of the hearing"
+          },
+          "ianaTimeZoneId": {
+            "type": "string",
+            "description": "The IANA timezone of the hearing"
+          },
+          "terminologySetId": {
+            "type": "string",
+            "description": "The terminology set used in the hearing"
+          },
+          "assignedTimeBlock": {
+            "description": "The time block assigned to the hearing",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/HearingTimeBlockModel"
+              }
+            ]
+          },
+          "hearingMessage": {
+            "description": "The message inserted at the start of the hearing",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/HearingMessageModel"
+              }
+            ]
+          },
+          "hearingParticipants": {
+            "description": "The participants in the hearing",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HearingParticipantModel"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "caseId",
+          "caseNo",
+          "caseName",
+          "organisationId",
+          "courtId",
+          "courtroomId",
+          "systemStatus",
+          "hearingStatus",
+          "assignedTimeBlock",
+          "hearingMessage"
+        ]
+      },
+      "EditHearingParticipantModel": {
+        "type": "object",
+        "properties": {
+          "participantParty": {
+            "type": "string",
+            "description": "The party of the hearing participant"
+          },
+          "email": {
+            "type": "string",
+            "description": "The email address of the hearing participant"
+          }
+        },
+        "required": [
+          "participantParty",
+          "email"
+        ]
+      },
+      "EditHearingModel": {
+        "type": "object",
+        "properties": {
+          "caseName": {
+            "type": "string",
+            "description": "The name of the case associated with the hearing"
+          },
+          "ianaTimeZoneId": {
+            "type": "string",
+            "description": "The IANA identifier for the time zone of the hearing"
+          },
+          "assignedTimeBlock": {
+            "description": "The time block assigned to the hearing",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/HearingTimeBlockModel"
+              }
+            ]
+          },
+          "emailTemplateBody": {
+            "type": "string",
+            "description": "The email template body for this hearing"
+          },
+          "terminologySetId": {
+            "type": "string",
+            "description": "The unique identifier of the terminology set used in this hearing"
+          },
+          "participants": {
+            "description": "The list of participants in the hearing",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EditHearingParticipantModel"
+            }
+          }
+        },
+        "required": [
+          "caseName",
+          "assignedTimeBlock",
+          "emailTemplateBody",
+          "participants"
+        ]
+      },
+      "HearingSearchResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the hearing"
+          },
+          "caseNo": {
+            "type": "string",
+            "description": "The external case number of the case associated with the hearing"
+          },
+          "caseName": {
+            "type": "string",
+            "description": "The name of the case associated with the hearing"
+          },
+          "courtroomId": {
+            "type": "string",
+            "description": "The unique identifier of the courtroom associated with the hearing"
+          },
+          "courtroomName": {
+            "type": "string",
+            "description": "The name of the courtroom associated with the hearing"
+          },
+          "startDateTime": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The start of this hearing"
+          },
+          "endDateTime": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The end of this hearing"
+          },
+          "ianaTimeZoneId": {
+            "type": "string",
+            "description": "The IANA timezone of the hearing"
+          },
+          "judges": {
+            "description": "The list of judges associated with this hearing",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "caseNo",
+          "caseName",
+          "courtroomId",
+          "courtroomName",
+          "startDateTime",
+          "endDateTime",
+          "ianaTimeZoneId",
+          "judges"
+        ]
+      },
+      "OnlineMeetingModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the onlineMeeting"
+          },
+          "joinWebUrl": {
+            "type": "string",
+            "description": "The url to join the meeting"
+          },
+          "joinInformation": {
+            "type": "string",
+            "description": "The information related to joining the meeting"
+          }
+        },
+        "required": [
+          "id",
+          "joinWebUrl"
+        ]
+      },
+      "RoomOnlineMeetingModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the room online meeting"
+          },
+          "roomId": {
+            "type": "string",
+            "description": "The hearing or solo room id of the room online meeting"
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of the room online meeting"
+          },
+          "onlineMeeting": {
+            "description": "The online meeting of the room online meeting",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OnlineMeetingModel"
+              }
+            ]
+          },
+          "participants": {
+            "description": "The participants currently in the room online meeting",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoomParticipantModel"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "roomId",
+          "status"
+        ]
+      },
+      "HearingRoomModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the hearing room"
+          },
+          "hearingId": {
+            "type": "string",
+            "description": "The unique identifier of the hearing associated with the hearing room"
+          },
+          "organisationId": {
+            "type": "string",
+            "description": "The unique identifier of the organisation associated with the hearing room"
+          },
+          "courtId": {
+            "type": "string",
+            "description": "The unique identifier of the court associated with the hearing room"
+          },
+          "courtroomId": {
+            "type": "string",
+            "description": "The unique identifier of the courtroom associated with the hearing room"
+          },
+          "caseId": {
+            "type": "string",
+            "description": "The unique identifier of the case associated with the hearing room"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the hearing room"
+          },
+          "expectedParticipantParty": {
+            "type": "string",
+            "description": "The type of the hearing room"
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "Flags whether this is the default hearing room"
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of the object"
+          },
+          "roomOnlineMeeting": {
+            "description": "The room online meeting information for the hearing room",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RoomOnlineMeetingModel"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "hearingId",
+          "organisationId",
+          "courtId",
+          "courtroomId",
+          "caseId",
+          "name",
+          "expectedParticipantParty",
+          "isDefault",
+          "status",
+          "roomOnlineMeeting"
+        ]
+      },
+      "SoloRoomModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the solo room"
+          },
+          "hearingId": {
+            "type": "string",
+            "description": "The unique identifier of the hearing associated with the solo room"
+          },
+          "organisationId": {
+            "type": "string",
+            "description": "The unique identifier of the organisation associated with the solo room"
+          },
+          "courtId": {
+            "type": "string",
+            "description": "The unique identifier of the court associated with the solo room"
+          },
+          "courtroomId": {
+            "type": "string",
+            "description": "The unique identifier of the courtroom associated with the solo room"
+          },
+          "caseId": {
+            "type": "string",
+            "description": "The unique identifier of the case associated with the solo room"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the solo room"
+          },
+          "expectedParticipantParty": {
+            "type": "string",
+            "description": "The expected participant type of the solo room"
+          },
+          "isDefault": {
+            "type": "boolean",
+            "description": "Flags whether this is the default solo room"
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of the object"
+          },
+          "roomOnlineMeetings": {
+            "description": "The room online meetings information for the solo room",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoomOnlineMeetingModel"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "hearingId",
+          "organisationId",
+          "courtId",
+          "courtroomId",
+          "caseId",
+          "name",
+          "expectedParticipantParty",
+          "isDefault",
+          "status",
+          "roomOnlineMeetings"
+        ]
+      },
+      "HearingMeetingRoomsModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the hearing"
+          },
+          "caseId": {
+            "type": "string",
+            "description": "The unique identifier of the case associated with the hearing"
+          },
+          "caseNo": {
+            "type": "string",
+            "description": "The external case number of the case associated with the hearing"
+          },
+          "caseName": {
+            "type": "string",
+            "description": "The name of the case associated with the hearing"
+          },
+          "organisationId": {
+            "type": "string",
+            "description": "The unique identifier of the organisation associated with the hearing"
+          },
+          "courtId": {
+            "type": "string",
+            "description": "The unique identifier of the court associated with the hearing"
+          },
+          "courtroomId": {
+            "type": "string",
+            "description": "The unique identifier of the courtroom associated with the hearing"
+          },
+          "systemStatus": {
+            "type": "string",
+            "description": "The status of the object"
+          },
+          "hearingStatus": {
+            "type": "string",
+            "description": "The status of the hearing"
+          },
+          "ianaTimeZoneId": {
+            "type": "string",
+            "description": "The IANA timezone of the hearing"
+          },
+          "terminologySetId": {
+            "type": "string",
+            "description": "The terminology set used in the hearing"
+          },
+          "assignedTimeBlock": {
+            "description": "The time block assigned to the hearing",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/HearingTimeBlockModel"
+              }
+            ]
+          },
+          "hearingMessage": {
+            "description": "The message inserted at the start of the hearing",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/HearingMessageModel"
+              }
+            ]
+          },
+          "hearingParticipants": {
+            "description": "The participants in the hearing",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HearingParticipantModel"
+            }
+          },
+          "caseRoomOnlineMeeting": {
+            "description": "The meeting object for the case room",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OnlineMeetingModel"
+              }
+            ]
+          },
+          "receptionRoomOnlineMeeting": {
+            "description": "The meeting object for the reception room",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OnlineMeetingModel"
+              }
+            ]
+          },
+          "partyRooms": {
+            "description": "The list of party rooms linked to this hearing",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/HearingRoomModel"
+            }
+          },
+          "soloRooms": {
+            "description": "The list of solo rooms linked to this hearing",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SoloRoomModel"
+            }
+          },
+          "caseRoomParticipants": {
+            "description": "The list of case room participants linked to this hearing",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CaseRoomParticipantModel"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "caseId",
+          "caseNo",
+          "caseName",
+          "organisationId",
+          "courtId",
+          "courtroomId",
+          "systemStatus",
+          "hearingStatus",
+          "assignedTimeBlock",
+          "hearingMessage",
+          "caseRoomParticipants"
+        ]
+      },
+      "ScheduledHearingSummaryModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the hearing"
+          },
+          "caseNo": {
+            "type": "string",
+            "description": "The case number of the case associated with the hearing"
+          },
+          "caseName": {
+            "type": "string",
+            "description": "The name of the case associated with the hearing"
+          },
+          "courtroomName": {
+            "type": "string",
+            "description": "The name of the courtroom associated with the hearing"
+          },
+          "caseOnlineMeetingUrl": {
+            "type": "string",
+            "description": "The URL of the online meeting for the case associated with the hearing"
+          },
+          "judges": {
+            "description": "The names of the judge(s) assigned to the hearing",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ianaTimeZoneId": {
+            "type": "string",
+            "description": "The IANA timezone of the hearing"
+          },
+          "assignedTimeBlock": {
+            "description": "The time block assigned to the hearing",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/HearingTimeBlockModel"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "caseNo",
+          "caseName",
+          "courtroomName",
+          "judges",
+          "ianaTimeZoneId",
+          "assignedTimeBlock"
+        ]
+      },
+      "CreatePartyRoomModel": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the hearing room"
+          },
+          "expectedParticipantParty": {
+            "type": "string",
+            "description": "The expected participant party of the hearing room"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "RenameRoomParticipantModel": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "description": "Display name to rename a room participant"
+          }
+        },
+        "required": [
+          "displayName"
+        ]
+      },
+      "TerminologyDefinitionModel": {
+        "type": "object",
+        "properties": {
+          "term": {
+            "type": "string",
+            "description": "The name of the term"
+          },
+          "value": {
+            "type": "string",
+            "description": "The value of the term"
+          },
+          "definition": {
+            "type": "string",
+            "description": "The definition of the term"
+          }
+        },
+        "required": [
+          "term",
+          "value",
+          "definition"
+        ]
+      },
+      "SourceRoomRequestModel": {
+        "type": "object",
+        "properties": {
+          "roomId": {
+            "type": "string",
+            "description": "Source room identifier"
+          }
+        },
+        "required": [
+          "roomId"
+        ]
+      },
+      "RecallParticipantsRequestModel": {
+        "type": "object",
+        "properties": {
+          "participantIds": {
+            "description": "List of participant ids to be recalled",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "InviteParticipantsRequestModel": {
+        "type": "object",
+        "properties": {
+          "participantIds": {
+            "description": "List of participant ids to be invited",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "participantIds"
+        ]
+      },
+      "RenameRoomModel": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Display name to rename a solo/hearing room"
+          },
+          "roomType": {
+            "type": "string",
+            "description": "Type of the room (solo/hearing)"
+          }
+        },
+        "required": [
+          "name",
+          "roomType"
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/authentication/client/accessTokens/{accessTokenType}": {
+      "post": {
+        "operationId": "authentication_exchangeClientAccessToken",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "accessTokenType",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieves the specified access token for the currently authenticated user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "authentication"
+        ]
+      }
+    },
+    "/cases": {
+      "get": {
+        "operationId": "cases_getCases",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "chatId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The case details were successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaseSummaryModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorised to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified chat ID was not found."
+          }
+        },
+        "tags": [
+          "case"
+        ]
+      }
+    },
+    "/cases/{caseId}/room": {
+      "get": {
+        "operationId": "cases_getCaseParticipants",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "caseId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The case details were successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CaseRoomParticipantModel"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorised to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified case ID was not found."
+          }
+        },
+        "tags": [
+          "case"
+        ]
+      }
+    },
+    "/cases/{caseId}/room/mute-participants": {
+      "post": {
+        "operationId": "cases_muteParticipants",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "caseId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The participants were successfully muted."
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorised to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified case ID was not found."
+          }
+        },
+        "tags": [
+          "case"
+        ]
+      }
+    },
+    "/cases/{caseId}/room/message": {
+      "post": {
+        "operationId": "cases_broadcastMessage",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "caseId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendMessageRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The message was successfully sent"
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorised to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified case ID was not found."
+          }
+        },
+        "tags": [
+          "case"
+        ]
+      }
+    },
+    "/channel/{channelId}": {
+      "get": {
+        "operationId": "channels_getCourtroom",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "channelId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The channel details were successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CourtroomSummaryModel"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorised to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified channel was not found."
+          }
+        },
+        "tags": [
+          "channel"
+        ]
+      }
+    },
+    "/courts/{courtId}/courtrooms/{courtroomId}/commstemplate/{templateUsage}": {
+      "get": {
+        "operationId": "commsTemplates_getCommsTemplate",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "courtId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "courtroomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "templateUsage",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The comms template was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommsTemplateModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The user is not authorised."
+          },
+          "404": {
+            "description": "The specified court, courtroom or comms template was not found."
+          }
+        },
+        "tags": [
+          "commsTemplate"
+        ]
+      }
+    },
+    "/courts/{courtId}/courtrooms/{courtroomId}/hearings": {
+      "post": {
+        "operationId": "hearings_createHearing",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "courtId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "courtroomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateHearingModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The hearing was successfully created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HearingModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorised to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified court or courtroom was not found."
+          }
+        },
+        "tags": [
+          "hearing"
+        ]
+      },
+      "get": {
+        "operationId": "hearings_search",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "courtId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "courtroomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "term",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The hearing search results were successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HearingSearchResult"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorised to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified court or courtroom was not found."
+          }
+        },
+        "tags": [
+          "hearing"
+        ]
+      }
+    },
+    "/courts/{courtId}/courtrooms/{courtroomId}/hearings/{id}": {
+      "put": {
+        "operationId": "hearings_editHearing",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "courtId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "courtroomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EditHearingModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The hearing was successfully updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HearingModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorised to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified hearing, court or courtroom was not found."
+          }
+        },
+        "tags": [
+          "hearing"
+        ]
+      },
+      "get": {
+        "operationId": "hearings_getHearing",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "courtId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "courtroomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The hearing was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HearingModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorised to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified hearing was not found."
+          }
+        },
+        "tags": [
+          "hearing"
+        ]
+      },
+      "delete": {
+        "operationId": "hearings_cancelHearing",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "courtId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "courtroomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The hearing was successfully deleted."
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorised to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified hearing was not found."
+          }
+        },
+        "tags": [
+          "hearing"
+        ]
+      }
+    },
+    "/courts/{courtId}/courtrooms/{courtroomId}/hearings/{id}/meeting-rooms": {
+      "get": {
+        "operationId": "hearings_getHearingMeetingRooms",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "courtId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "courtroomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The hearing was successfully retrieved with room links.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HearingMeetingRoomsModel"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorised to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified hearing was not found."
+          }
+        },
+        "tags": [
+          "hearing"
+        ]
+      }
+    },
+    "/courts/{courtId}/courtrooms/{courtroomId}/hearings/scheduled/{startDate}": {
+      "get": {
+        "operationId": "hearings_getScheduledHearings",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "courtId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "courtroomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}\\-\\d{2}\\-\\d{2}$",
+              "example": "2021-31-01"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieves the list of hearings that are scheduled for the given business week the start date falls into.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ScheduledHearingSummaryModel"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorised to perform the requested operation."
+          }
+        },
+        "tags": [
+          "hearing"
+        ]
+      }
+    },
+    "/courts/{courtId}/courtrooms/{courtroomId}/hearings/{id}/party-rooms": {
+      "post": {
+        "operationId": "hearings_createPartyRoom",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "courtId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "courtroomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePartyRoomModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The party room was successfully created.",
+            "headers": {
+              "location": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "location of the created hearing room."
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorised to perform the requested operation."
+          },
+          "404": {
+            "description": "The one ore more related entities was not found to create the party room."
+          }
+        },
+        "tags": [
+          "hearing"
+        ]
+      }
+    },
+    "/courts/{courtId}/courtrooms/{courtroomId}/presidingjudges": {
+      "get": {
+        "operationId": "judges_getPresidingJudges",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "courtId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "courtroomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The presiding judges list was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/JudgeInfoModel"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The user is not authorised."
+          },
+          "404": {
+            "description": "The specified court or courtroom was not found."
+          }
+        },
+        "tags": [
+          "presidingJudges"
+        ]
+      }
+    },
+    "/courts/{courtId}/courtrooms/{courtroomId}/hearings/{hearingId}/roomParticipants/{roomParticipantId}/rename": {
+      "put": {
+        "operationId": "roomParticipants_rename",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "courtId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "courtroomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hearingId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "roomParticipantId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RenameRoomParticipantModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The display name was successfully updated."
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorized to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified hearing room was not found."
+          }
+        },
+        "tags": [
+          "roomParticipant"
+        ]
+      }
+    },
+    "/courts/{courtId}/terminologySets": {
+      "get": {
+        "operationId": "courts_getTerminologySets",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "courtId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The terminology set list was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorised to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified court was not found."
+          }
+        },
+        "tags": [
+          "terminologySet"
+        ]
+      }
+    },
+    "/courts/{courtId}/terminologySets/{setId}": {
+      "get": {
+        "operationId": "courts_getTerminologySet",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "courtId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "setId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The terminology definition list was successfully retrieved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TerminologyDefinitionModel"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorised to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified court was not found."
+          }
+        },
+        "tags": [
+          "terminologySet"
+        ]
+      }
+    },
+    "/courts/{courtId}/courtrooms/{courtroomId}/hearings/{hearingId}/rooms/{roomId}/send-message": {
+      "post": {
+        "operationId": "rooms_sendMessage",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "courtId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "courtroomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hearingId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "roomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendMessageRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The message was successfully posted."
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorized to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified room was not found."
+          }
+        },
+        "tags": [
+          "room"
+        ]
+      }
+    },
+    "/courts/{courtId}/courtrooms/{courtroomId}/hearings/{hearingId}/rooms/{caseId}/invite-room-participants-to-case": {
+      "post": {
+        "operationId": "rooms_inviteRoomParticipantsToCase",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "courtId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "courtroomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hearingId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "caseId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SourceRoomRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The participants in the provided meeting room are invited to the case"
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorized to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified court, courtroom, hearing or room combination was not found"
+          }
+        },
+        "tags": [
+          "room"
+        ]
+      }
+    },
+    "/courts/{courtId}/courtrooms/{courtroomId}/hearings/{hearingId}/rooms/{caseId}/recall-participants-from-case": {
+      "post": {
+        "operationId": "rooms_recallParticipantsFromCase",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "courtId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "courtroomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hearingId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "caseId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecallParticipantsRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The participants in the case room are recalled to their respective rooms"
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorized to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified court, courtroom, hearing or room combination was not found"
+          }
+        },
+        "tags": [
+          "room"
+        ]
+      }
+    },
+    "/courts/{courtId}/courtrooms/{courtroomId}/hearings/{hearingId}/rooms/{roomId}/invite-participants-to-room": {
+      "put": {
+        "operationId": "rooms_inviteParticipantsToRoom",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "courtId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "courtroomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hearingId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "roomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InviteParticipantsRequestModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The participants were successfully invited"
+          },
+          "201": {
+            "description": "The participants in the provided list are invited to the room and then reassigned appropriately"
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorized to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified court, courtroom, hearing or room combination was not found"
+          }
+        },
+        "tags": [
+          "room"
+        ]
+      }
+    },
+    "/courts/{courtId}/courtrooms/{courtroomId}/hearings/{hearingId}/rooms/{roomId}/rename": {
+      "put": {
+        "operationId": "rooms_rename",
+        "summary": "",
+        "parameters": [
+          {
+            "name": "courtId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "courtroomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hearingId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "roomId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RenameRoomModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The name of a solo/hearing room is changed"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "The currently authenticated caller is not authorized to perform the requested operation."
+          },
+          "404": {
+            "description": "The specified court, courtroom, hearing or room combination was not found"
+          }
+        },
+        "tags": [
+          "room"
+        ]
+      }
+    }
+  }
+}

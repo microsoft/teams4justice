@@ -1,0 +1,725 @@
+// call establishing
+{
+    "@odata.type": "#microsoft.graph.commsNotifications",
+    "value": [
+        {
+            "@odata.type": "#microsoft.graph.commsNotification",
+            "changeType": "updated",
+            "resource": "/app/calls/721f6900-013b-43ac-8647-36bc145e4753",
+            "resourceUrl": "/communications/calls/721f6900-013b-43ac-8647-36bc145e4753",
+            "resourceData": {
+                "@odata.type": "#microsoft.graph.call",
+                "state": "establishing",
+                "chatInfo": {
+                    "@odata.type": "#microsoft.graph.chatInfo",
+                    "threadId": "19:meeting_MDBmNjYzZDYtZGQ3Mi00YmU3LWExMDYtMGU1MzA5ODViYTNh@thread.v2",
+                    "messageId": "0"
+                },
+                "meetingInfo": {
+                    "@odata.type": "#microsoft.graph.organizerMeetingInfo",
+                    "organizer": {
+                        "@odata.type": "#microsoft.graph.identitySet",
+                        "user": {
+                            "@odata.type": "#microsoft.graph.identity",
+                            "id": "f4c91349-8531-4e58-9ccc-0f127ed07d32",
+                            "displayName": "t4j-service-teams",
+                            "tenantId": "41ed3ee5-8a22-4b49-b49a-6b09bffea467"
+                        }
+                    },
+                    "allowConversationWithoutHost": true
+                },
+                "callChainId": "209480a5-76d1-4e64-94cc-918ffc2a0d52"
+            }
+        }
+    ]
+}
+
+// call establishing with meeting meetingCapability
+{
+    "@odata.type": "#microsoft.graph.commsNotifications",
+    "value": [
+        {
+            "@odata.type": "#microsoft.graph.commsNotification",
+            "changeType": "updated",
+            "resource": "/app/calls/721f6900-013b-43ac-8647-36bc145e4753",
+            "resourceUrl": "/communications/calls/721f6900-013b-43ac-8647-36bc145e4753",
+            "resourceData": {
+                "@odata.type": "#microsoft.graph.call",
+                "state": "establishing",
+                "chatInfo": {
+                    "@odata.type": "#microsoft.graph.chatInfo",
+                    "threadId": "19:meeting_MDBmNjYzZDYtZGQ3Mi00YmU3LWExMDYtMGU1MzA5ODViYTNh@thread.v2",
+                    "messageId": "0"
+                },
+                "meetingInfo": {
+                    "@odata.type": "#microsoft.graph.organizerMeetingInfo",
+                    "organizer": {
+                        "@odata.type": "#microsoft.graph.identitySet",
+                        "user": {
+                            "@odata.type": "#microsoft.graph.identity",
+                            "id": "f4c91349-8531-4e58-9ccc-0f127ed07d32",
+                            "displayName": "t4j-service-teams",
+                            "tenantId": "41ed3ee5-8a22-4b49-b49a-6b09bffea467"
+                        }
+                    },
+                    "allowConversationWithoutHost": true
+                },
+                "meetingCapability": {
+                    "@odata.type": "#microsoft.graph.meetingCapability",
+                    "allowAnonymousUsersToDialOut": false,
+                    "autoAdmittedUsers": "everyoneInCompany",
+                    "allowAnonymousUsersToStartMeeting": false,
+                    "entryExitNotificationsEnabled": true,
+                    "allowRaiseHands": true,
+                    "attendeeRestrictions": "UnRestricted",
+                    "allowPstnUsersToBypassLobby": false,
+                    "lockMeeting": false,
+                    "attendeeViewModes": "Default",
+                    "stagingRoomEnabled": false,
+                    "cartEnabled": false,
+                    "refreshCartKey": false
+                },
+                "callChainId": "209480a5-76d1-4e64-94cc-918ffc2a0d52"
+            }
+        }
+    ]
+}
+
+// call established
+{
+    "@odata.type": "#microsoft.graph.commsNotifications",
+    "value": [
+        {
+            "@odata.type": "#microsoft.graph.commsNotification",
+            "changeType": "updated",
+            "resource": "/app/calls/721f6900-013b-43ac-8647-36bc145e4753",
+            "resourceUrl": "/communications/calls/721f6900-013b-43ac-8647-36bc145e4753",
+            "resourceData": {
+                "@odata.type": "#microsoft.graph.call",
+                "state": "established",
+                "direction": "outgoing",
+                "meetingInfo": {
+                    "@odata.type": "#microsoft.graph.organizerMeetingInfo",
+                    "organizer": {
+                        "@odata.type": "#microsoft.graph.identitySet",
+                        "user": {
+                            "@odata.type": "#microsoft.graph.identity",
+                            "id": "f4c91349-8531-4e58-9ccc-0f127ed07d32",
+                            "displayName": "t4j-service-teams",
+                            "tenantId": "41ed3ee5-8a22-4b49-b49a-6b09bffea467"
+                        }
+                    },
+                    "allowConversationWithoutHost": true
+                },
+                "callChainId": "209480a5-76d1-4e64-94cc-918ffc2a0d52"
+            }
+        }
+    ]
+}
+
+// participants updated - just bot
+{
+    "@odata.type": "#microsoft.graph.commsNotifications",
+    "value": [
+        {
+            "@odata.type": "#microsoft.graph.commsNotification",
+            "changeType": "updated",
+            "resource": "/app/calls/721f6900-013b-43ac-8647-36bc145e4753/participants",
+            "resourceUrl": "/communications/calls/721f6900-013b-43ac-8647-36bc145e4753/participants",
+            "resourceData": [
+                {
+                    "@odata.type": "#microsoft.graph.participant",
+                    "info": {
+                        "@odata.type": "#microsoft.graph.participantInfo",
+                        "identity": {
+                            "@odata.type": "#microsoft.graph.identitySet",
+                            "application": {
+                                "@odata.type": "#microsoft.graph.identity",
+                                "id": "e5075cbf-583f-43f3-a56d-e7e90212f9a8",
+                                "tenantId": "41ed3ee5-8a22-4b49-b49a-6b09bffea467",
+                                "identityProvider": "AAD"
+                            }
+                        },
+                        "endpointType": "default",
+                        "clientVersion": "tfj-bot-dev (appid:e5075cbf-583f-43f3-a56d-e7e90212f9a8)"
+                    },
+                    "mediaStreams": [
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "audio",
+                            "label": "main-audio",
+                            "sourceId": "1",
+                            "direction": "sendReceive",
+                            "serverMuted": false
+                        }
+                    ],
+                    "isMuted": false,
+                    "isInLobby": false,
+                    "publishedStates": [],
+                    "meetingRole": "presenter",
+                    "id": "87e88756-3d1e-493a-acac-a66e155444b3"
+                }
+            ]
+        }
+    ]
+}
+
+
+// participants update - bot & user
+{
+    "@odata.type": "#microsoft.graph.commsNotifications",
+    "value": [
+        {
+            "@odata.type": "#microsoft.graph.commsNotification",
+            "changeType": "updated",
+            "resource": "/app/calls/721f6900-013b-43ac-8647-36bc145e4753/participants",
+            "resourceUrl": "/communications/calls/721f6900-013b-43ac-8647-36bc145e4753/participants",
+            "resourceData": [
+                {
+                    "@odata.type": "#microsoft.graph.participant",
+                    "info": {
+                        "@odata.type": "#microsoft.graph.participantInfo",
+                        "identity": {
+                            "@odata.type": "#microsoft.graph.identitySet",
+                            "application": {
+                                "@odata.type": "#microsoft.graph.identity",
+                                "id": "e5075cbf-583f-43f3-a56d-e7e90212f9a8",
+                                "tenantId": "41ed3ee5-8a22-4b49-b49a-6b09bffea467",
+                                "identityProvider": "AAD"
+                            }
+                        },
+                        "endpointType": "default",
+                        "clientVersion": "tfj-bot-dev (appid:e5075cbf-583f-43f3-a56d-e7e90212f9a8)"
+                    },
+                    "mediaStreams": [
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "audio",
+                            "label": "main-audio",
+                            "sourceId": "1",
+                            "direction": "sendReceive",
+                            "serverMuted": false
+                        }
+                    ],
+                    "isMuted": false,
+                    "isInLobby": false,
+                    "publishedStates": [],
+                    "meetingRole": "presenter",
+                    "id": "87e88756-3d1e-493a-acac-a66e155444b3"
+                },
+                {
+                    "@odata.type": "#microsoft.graph.participant",
+                    "info": {
+                        "@odata.type": "#microsoft.graph.participantInfo",
+                        "identity": {
+                            "@odata.type": "#microsoft.graph.identitySet",
+                            "user": {
+                                "@odata.type": "#microsoft.graph.identity",
+                                "id": "ef670bf1-f74d-46df-8566-b5d0f74a7d7f",
+                                "displayName": "Dare Ojo",
+                                "tenantId": "72f988bf-86f1-41af-91ab-2d7cd011db47",
+                                "identityProvider": "AAD"
+                            }
+                        },
+                        "endpointType": "default",
+                        "languageId": "en-us",
+                        "platformId": "27",
+                        "clientVersion": "CallSignalingAgent (27/1.4.00.17563//;release_fabiodi/bp.2021.14.01.31;releases/CL2021.R14)"
+                    },
+                    "mediaStreams": [
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "audio",
+                            "label": "main-audio",
+                            "sourceId": "1",
+                            "direction": "sendReceive",
+                            "serverMuted": true
+                        },
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "video",
+                            "label": "main-video",
+                            "sourceId": "2",
+                            "direction": "receiveOnly",
+                            "serverMuted": false
+                        },
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "videoBasedScreenSharing",
+                            "label": "applicationsharing-video",
+                            "sourceId": "12",
+                            "direction": "receiveOnly",
+                            "serverMuted": false
+                        },
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "data",
+                            "label": "data",
+                            "sourceId": "13",
+                            "direction": "sendReceive",
+                            "serverMuted": false
+                        }
+                    ],
+                    "isMuted": true,
+                    "isInLobby": true,
+                    "publishedStates": [],
+                    "meetingRole": "presenter",
+                    "id": "12f3beaf-b94a-43e5-a14c-fe7b540f8896"
+                }
+            ]
+        }
+    ]
+}
+
+// participants update - new user joins
+{
+    "@odata.type": "#microsoft.graph.commsNotifications",
+    "value": [
+        {
+            "@odata.type": "#microsoft.graph.commsNotification",
+            "changeType": "updated",
+            "resource": "/app/calls/721f6900-013b-43ac-8647-36bc145e4753/participants",
+            "resourceUrl": "/communications/calls/721f6900-013b-43ac-8647-36bc145e4753/participants",
+            "resourceData": [
+                {
+                    "@odata.type": "#microsoft.graph.participant",
+                    "info": {
+                        "@odata.type": "#microsoft.graph.participantInfo",
+                        "identity": {
+                            "@odata.type": "#microsoft.graph.identitySet",
+                            "application": {
+                                "@odata.type": "#microsoft.graph.identity",
+                                "id": "e5075cbf-583f-43f3-a56d-e7e90212f9a8",
+                                "tenantId": "41ed3ee5-8a22-4b49-b49a-6b09bffea467",
+                                "identityProvider": "AAD"
+                            }
+                        },
+                        "endpointType": "default",
+                        "clientVersion": "tfj-bot-dev (appid:e5075cbf-583f-43f3-a56d-e7e90212f9a8)"
+                    },
+                    "mediaStreams": [
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "audio",
+                            "label": "main-audio",
+                            "sourceId": "1",
+                            "direction": "sendReceive",
+                            "serverMuted": false
+                        }
+                    ],
+                    "isMuted": false,
+                    "isInLobby": false,
+                    "publishedStates": [],
+                    "meetingRole": "presenter",
+                    "id": "87e88756-3d1e-493a-acac-a66e155444b3"
+                },
+                {
+                    "@odata.type": "#microsoft.graph.participant",
+                    "info": {
+                        "@odata.type": "#microsoft.graph.participantInfo",
+                        "identity": {
+                            "@odata.type": "#microsoft.graph.identitySet",
+                            "user": {
+                                "@odata.type": "#microsoft.graph.identity",
+                                "id": "e7b2338d-6ac6-4c46-99ae-b751d7b03ad9",
+                                "displayName": "Jack Corrigan",
+                                "tenantId": "41ed3ee5-8a22-4b49-b49a-6b09bffea467",
+                                "identityProvider": "AAD"
+                            }
+                        },
+                        "endpointType": "default",
+                        "languageId": "en-US",
+                        "clientVersion": "SkypeSpaces/1415/1.0.0.2021062127/os=windows; osVer=10; deviceType=computer; browser=edgeChromium; browserVer=91.0/TsCallingVersion=2021.14.01.40/Ovb=446b0d88639d8bd1a03c151f92300ec63fd2e684"
+                    },
+                    "mediaStreams": [
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "audio",
+                            "label": "main-audio",
+                            "sourceId": "10",
+                            "direction": "sendReceive",
+                            "serverMuted": false
+                        },
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "video",
+                            "label": "main-video",
+                            "sourceId": "11",
+                            "direction": "receiveOnly",
+                            "serverMuted": false
+                        },
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "videoBasedScreenSharing",
+                            "label": "applicationsharing-video",
+                            "sourceId": "17",
+                            "direction": "receiveOnly",
+                            "serverMuted": false
+                        }
+                    ],
+                    "isMuted": true,
+                    "isInLobby": false,
+                    "publishedStates": [],
+                    "meetingRole": "presenter",
+                    "id": "91c79bce-1e94-46de-9d51-768b005bc8b2"
+                }
+            ]
+        }
+    ]
+}
+
+// participants update - new phone user joins
+
+{
+    "@odata.type": "#microsoft.graph.commsNotifications",
+    "value": [
+        {
+            "@odata.type": "#microsoft.graph.commsNotification",
+            "changeType": "updated",
+            "resource": "/app/calls/7a1f6500-0120-4863-89bf-dd5a7a13da13/participants",
+            "resourceUrl": "/communications/calls/7a1f6500-0120-4863-89bf-dd5a7a13da13/participants",
+            "resourceData": [
+                {
+                    "@odata.type": "#microsoft.graph.participant",
+                    "info": {
+                        "@odata.type": "#microsoft.graph.participantInfo",
+                        "identity": {
+                            "@odata.type": "#microsoft.graph.identitySet",
+                            "phone": {
+                                "@odata.type": "#microsoft.graph.identity",
+                                "id": "+12031234567_04f9074216174f8495ae32ee29ee9e71",
+                                "displayName": "+12031234567",
+                                "identityProvider": "None"
+                            }
+                        },
+                        "endpointType": "default",
+                        "languageId": "en-US"
+                    },
+                    "mediaStreams": [
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "audio",
+                            "label": "main-audio",
+                            "sourceId": "1",
+                            "direction": "sendReceive",
+                            "serverMuted": true
+                        }
+                    ],
+                    "isMuted": true,
+                    "isInLobby": true,
+                    "publishedStates": [],
+                    "meetingRole": "attendee",
+                    "id": "89a984eb-432c-40f5-8823-a16b8bc18ea9"
+                },
+                {
+                    "@odata.type": "#microsoft.graph.participant",
+                    "info": {
+                        "@odata.type": "#microsoft.graph.participantInfo",
+                        "identity": {
+                            "@odata.type": "#microsoft.graph.identitySet",
+                            "application": {
+                                "@odata.type": "#microsoft.graph.identity",
+                                "id": "e5075cbf-583f-43f3-a56d-e7e90212f9a8",
+                                "tenantId": "41ed3ee5-8a22-4b49-b49a-6b09bffea467",
+                                "identityProvider": "AAD"
+                            }
+                        },
+                        "endpointType": "default",
+                        "clientVersion": "T4J Call Management Bot (appid:e5075cbf-583f-43f3-a56d-e7e90212f9a8)"
+                    },
+                    "mediaStreams": [
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "audio",
+                            "label": "main-audio",
+                            "sourceId": "1",
+                            "direction": "sendReceive",
+                            "serverMuted": false
+                        }
+                    ],
+                    "isMuted": false,
+                    "isInLobby": false,
+                    "publishedStates": [],
+                    "meetingRole": "presenter",
+                    "id": "11a9a32a-775e-4f4f-9a9f-32979c773fa5"
+                },
+            ]
+        }
+    ]
+}
+
+// participants update - user unmutes
+{
+    "@odata.type": "#microsoft.graph.commsNotifications",
+    "value": [
+        {
+            "@odata.type": "#microsoft.graph.commsNotification",
+            "changeType": "updated",
+            "resource": "/app/calls/721f6900-013b-43ac-8647-36bc145e4753/participants",
+            "resourceUrl": "/communications/calls/721f6900-013b-43ac-8647-36bc145e4753/participants",
+            "resourceData": [
+                {
+                    "@odata.type": "#microsoft.graph.participant",
+                    "info": {
+                        "@odata.type": "#microsoft.graph.participantInfo",
+                        "identity": {
+                            "@odata.type": "#microsoft.graph.identitySet",
+                            "application": {
+                                "@odata.type": "#microsoft.graph.identity",
+                                "id": "e5075cbf-583f-43f3-a56d-e7e90212f9a8",
+                                "tenantId": "41ed3ee5-8a22-4b49-b49a-6b09bffea467",
+                                "identityProvider": "AAD"
+                            }
+                        },
+                        "endpointType": "default",
+                        "clientVersion": "tfj-bot-dev (appid:e5075cbf-583f-43f3-a56d-e7e90212f9a8)"
+                    },
+                    "mediaStreams": [
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "audio",
+                            "label": "main-audio",
+                            "sourceId": "1",
+                            "direction": "sendReceive",
+                            "serverMuted": false
+                        }
+                    ],
+                    "isMuted": false,
+                    "isInLobby": false,
+                    "publishedStates": [],
+                    "meetingRole": "presenter",
+                    "id": "87e88756-3d1e-493a-acac-a66e155444b3"
+                },
+                {
+                    "@odata.type": "#microsoft.graph.participant",
+                    "info": {
+                        "@odata.type": "#microsoft.graph.participantInfo",
+                        "identity": {
+                            "@odata.type": "#microsoft.graph.identitySet",
+                            "user": {
+                                "@odata.type": "#microsoft.graph.identity",
+                                "id": "e7b2338d-6ac6-4c46-99ae-b751d7b03ad9",
+                                "displayName": "Jack Corrigan",
+                                "tenantId": "41ed3ee5-8a22-4b49-b49a-6b09bffea467",
+                                "identityProvider": "AAD"
+                            }
+                        },
+                        "endpointType": "default",
+                        "languageId": "en-US",
+                        "clientVersion": "SkypeSpaces/1415/1.0.0.2021062127/os=windows; osVer=10; deviceType=computer; browser=edgeChromium; browserVer=91.0/TsCallingVersion=2021.14.01.40/Ovb=446b0d88639d8bd1a03c151f92300ec63fd2e684"
+                    },
+                    "mediaStreams": [
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "audio",
+                            "label": "main-audio",
+                            "sourceId": "2",
+                            "direction": "sendReceive",
+                            "serverMuted": false
+                        },
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "video",
+                            "label": "main-video",
+                            "sourceId": "3",
+                            "direction": "receiveOnly",
+                            "serverMuted": false
+                        },
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "videoBasedScreenSharing",
+                            "label": "applicationsharing-video",
+                            "sourceId": "9",
+                            "direction": "receiveOnly",
+                            "serverMuted": false
+                        }
+                    ],
+                    "isMuted": false,
+                    "isInLobby": false,
+                    "publishedStates": [],
+                    "meetingRole": "presenter",
+                    "id": "2620c7ba-4e9c-4c70-a702-0a38c844d982"
+                }
+            ]
+        }
+    ]
+}
+
+// participants update - user mutes
+{
+    "@odata.type": "#microsoft.graph.commsNotifications",
+    "value": [
+        {
+            "@odata.type": "#microsoft.graph.commsNotification",
+            "changeType": "updated",
+            "resource": "/app/calls/721f6900-013b-43ac-8647-36bc145e4753/participants",
+            "resourceUrl": "/communications/calls/721f6900-013b-43ac-8647-36bc145e4753/participants",
+            "resourceData": [
+                {
+                    "@odata.type": "#microsoft.graph.participant",
+                    "info": {
+                        "@odata.type": "#microsoft.graph.participantInfo",
+                        "identity": {
+                            "@odata.type": "#microsoft.graph.identitySet",
+                            "application": {
+                                "@odata.type": "#microsoft.graph.identity",
+                                "id": "e5075cbf-583f-43f3-a56d-e7e90212f9a8",
+                                "tenantId": "41ed3ee5-8a22-4b49-b49a-6b09bffea467",
+                                "identityProvider": "AAD"
+                            }
+                        },
+                        "endpointType": "default",
+                        "clientVersion": "tfj-bot-dev (appid:e5075cbf-583f-43f3-a56d-e7e90212f9a8)"
+                    },
+                    "mediaStreams": [
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "audio",
+                            "label": "main-audio",
+                            "sourceId": "1",
+                            "direction": "sendReceive",
+                            "serverMuted": false
+                        }
+                    ],
+                    "isMuted": false,
+                    "isInLobby": false,
+                    "publishedStates": [],
+                    "meetingRole": "presenter",
+                    "id": "87e88756-3d1e-493a-acac-a66e155444b3"
+                },
+                {
+                    "@odata.type": "#microsoft.graph.participant",
+                    "info": {
+                        "@odata.type": "#microsoft.graph.participantInfo",
+                        "identity": {
+                            "@odata.type": "#microsoft.graph.identitySet",
+                            "user": {
+                                "@odata.type": "#microsoft.graph.identity",
+                                "id": "e7b2338d-6ac6-4c46-99ae-b751d7b03ad9",
+                                "displayName": "Jack Corrigan",
+                                "tenantId": "41ed3ee5-8a22-4b49-b49a-6b09bffea467",
+                                "identityProvider": "AAD"
+                            }
+                        },
+                        "endpointType": "default",
+                        "languageId": "en-US",
+                        "clientVersion": "SkypeSpaces/1415/1.0.0.2021062127/os=windows; osVer=10; deviceType=computer; browser=edgeChromium; browserVer=91.0/TsCallingVersion=2021.14.01.40/Ovb=446b0d88639d8bd1a03c151f92300ec63fd2e684"
+                    },
+                    "mediaStreams": [
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "audio",
+                            "label": "main-audio",
+                            "sourceId": "2",
+                            "direction": "sendReceive",
+                            "serverMuted": false
+                        },
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "video",
+                            "label": "main-video",
+                            "sourceId": "3",
+                            "direction": "receiveOnly",
+                            "serverMuted": false
+                        },
+                        {
+                            "@odata.type": "#microsoft.graph.mediaStream",
+                            "mediaType": "videoBasedScreenSharing",
+                            "label": "applicationsharing-video",
+                            "sourceId": "9",
+                            "direction": "receiveOnly",
+                            "serverMuted": false
+                        }
+                    ],
+                    "isMuted": true,
+                    "isInLobby": false,
+                    "publishedStates": [],
+                    "meetingRole": "presenter",
+                    "id": "2620c7ba-4e9c-4c70-a702-0a38c844d982"
+                }
+            ]
+        }
+    ]
+}
+
+// examples of messaging endpoint notifications (from chat)
+// no current use cases for these, but possibly in the future
+
+// membersAdded notification
+{
+    "membersAdded": [
+        {
+            "id": "29:1byT3Q0eRu95kqeZFHbUqKjRcMG_U0jMBmcIb_u3kNKIB6KEM4fLLDgNTlyP7UXP7pA4ThKRO66NUKZNifHB2Yw",
+            "aadObjectId": "71c9e21d-b670-40de-b6d5-8bc73aafb9a5"
+        }
+    ],
+    "type": "conversationUpdate",
+    "timestamp": "2021-07-06T17:31:38.0627149Z",
+    "id": "f:98e89c1f-09e0-8a91-7186-1020ab6cb58a",
+    "channelId": "msteams",
+    "serviceUrl": "https://smba.trafficmanager.net/au/",
+    "from": {
+        "id": "29:1wOqWwFjagi3pUCbGETysNOL8FTuSAdzx9VkWEJPeMCjbWvLQ911cohRpdpVdP4Sz9yUro-CVRMg7iBmJyXqj4g",
+        "aadObjectId": "d470cd23-4d69-4db8-b9e7-393382e2afe8"
+    },
+    "conversation": {
+        "isGroup": true,
+        "conversationType": "channel",
+        "tenantId": "41ed3ee5-8a22-4b49-b49a-6b09bffea467",
+        "id": "19:mVADRolv0DpzidZB-co9BZKTF7XkjtPatVxLBMfyMeo1@thread.tacv2"
+    },
+    "recipient": {
+        "id": "28:e5075cbf-583f-43f3-a56d-e7e90212f9a8",
+        "name": "tfj-bot-dev"
+    },
+    "channelData": {
+        "team": {
+            "aadGroupId": "c2c9ef19-787b-44ac-ae4f-2020e95332ac",
+            "name": "Online Hearings T4J",
+            "id": "19:mVADRolv0DpzidZB-co9BZKTF7XkjtPatVxLBMfyMeo1@thread.tacv2"
+        },
+        "eventType": "teamMemberAdded",
+        "tenant": {
+            "id": "41ed3ee5-8a22-4b49-b49a-6b09bffea467"
+        }
+    }
+}
+
+// membersRemoved notification
+{
+    "membersRemoved": [
+        {
+            "id": "29:1HyXuJpd5EG8iibD468i7SNgFvGjk_1TnDPf1vueXiublNlZnJehmW53hc_DQLtpXFAtTWizDPxjy_nqDlC0-ZA",
+            "aadObjectId": "529d3642-206f-4b37-bc84-47b603027a36"
+        }
+    ],
+    "type": "conversationUpdate",
+    "timestamp": "2021-07-02T01:29:23.6337685Z",
+    "id": "f:7a28b1a3-1ce7-0124-096e-9993d4738fa0",
+    "channelId": "msteams",
+    "serviceUrl": "https://smba.trafficmanager.net/au/",
+    "from": {
+        "id": "29:1nnjm9LxVtU-bkwDpDVKYD6nhJNT6y_czMWG0D62A_-YUSd0FdFjYkzizDJV4Z4g0y_QTt8DaBs1atQzhAlCsza0tPrtBA7BjViu6RPtudW4"
+    },
+    "conversation": {
+        "isGroup": true,
+        "conversationType": "channel",
+        "tenantId": "41ed3ee5-8a22-4b49-b49a-6b09bffea467",
+        "id": "19:mVADRolv0DpzidZB-co9BZKTF7XkjtPatVxLBMfyMeo1@thread.tacv2"
+    },
+    "recipient": {
+        "id": "28:e5075cbf-583f-43f3-a56d-e7e90212f9a8",
+        "name": "tfj-bot-dev"
+    },
+    "channelData": {
+        "team": {
+            "aadGroupId": "c2c9ef19-787b-44ac-ae4f-2020e95332ac",
+            "name": "Online Hearings T4J",
+            "id": "19:mVADRolv0DpzidZB-co9BZKTF7XkjtPatVxLBMfyMeo1@thread.tacv2"
+        },
+        "eventType": "teamMemberRemoved",
+        "tenant": {
+            "id": "41ed3ee5-8a22-4b49-b49a-6b09bffea467"
+        }
+    }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Node.js & TypeScript",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "VARIANT": "14"
+    }
+  },
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  "extensions": [
+    "bierner.markdown-mermaid",
+    "davidanson.vscode-markdownlint",
+    "dbaeumer.vscode-eslint",
+    "hashicorp.terraform",
+    "esbenp.prettier-vscode",
+    "orta.vscode-jest",
+    "ms-azuretools.vscode-azurefunctions",
+    "stkb.rewrap"
+  ],
+  "forwardPorts": [],
+  "remoteUser": "node",
+  "runArgs": ["--init"],
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind"
+  ],
+  "overrideCommand": false,
+  "remoteEnv": {
+    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+  }
+}

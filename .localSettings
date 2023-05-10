@@ -1,0 +1,8 @@
+BROWSER=none
+HTTPS=true
+PORT=53000
+SSL_CRT_FILE=C:/Users/dannyg/.fx/certificate/localhost.crt
+SSL_KEY_FILE=C:/Users/dannyg/.fx/certificate/localhost.key
+REACT_APP_CLIENT_ID=1cc5e0c7-d68d-4c68-a298-236700047336
+REACT_APP_START_LOGIN_PAGE_URL=https://localhost:53000//auth-start.html
+WDS_SOCKET_PORT=0

@@ -1,0 +1,33 @@
+{
+  "properties": {
+    "roleName": "<CUSTOM ROLE NAME>",
+    "description": "",
+    "assignableScopes": [
+      "/subscriptions/<SUBSCRIPTION ID>"
+    ],
+    "permissions": [
+      {
+        "actions": [
+          "Microsoft.Authorization/locks/write",
+          "Microsoft.Authorization/locks/read",
+          "Microsoft.Authorization/locks/delete",
+          "Microsoft.Authorization/*/read",
+          "Microsoft.Insights/alertRules/*",
+          "Microsoft.Insights/diagnosticSettings/*",
+          "Microsoft.Network/virtualNetworks/subnets/joinViaServiceEndpoint/action",
+          "Microsoft.ResourceHealth/availabilityStatuses/read",
+          "Microsoft.Resources/deployments/*",
+          "Microsoft.Resources/subscriptions/resourceGroups/read",
+          "Microsoft.Storage/storageAccounts/*",
+          "Microsoft.Support/*",
+          "Microsoft.Authorization/roleAssignments/write",
+          "Microsoft.Authorization/roleAssignments/read",
+          "Microsoft.Authorization/roleAssignments/delete"
+        ],
+        "notActions": [],
+        "dataActions": [],
+        "notDataActions": []
+      }
+    ]
+  }
+}

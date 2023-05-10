@@ -1,0 +1,95 @@
+# This workflow helps generate the deployable zipped artifact for the Justice system.
+
+name: UI Build and Deploy
+on:
+  push:
+    branches:
+      - main
+      - release/**
+    paths:
+      - ".github/workflows/ui.yml"
+      - "src/rest-client/**"
+      - "src/ui/**"
+  workflow_dispatch:
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+env:
+  NODE_VERSION: "16.x"
+  AZURE_WEBAPP_NAME: teamsapp # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: "." # set this to the path to your web app project, defaults to the repository root
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build_and_deploy:
+    name: API Build and Deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    env:
+      TIME_ZONE_OPTIONS: ${{ vars.TIME_ZONE_OPTIONS }}
+      DEFAULT_TIME_ZONE: ${{ vars.DEFAULT_TIME_ZONE }}
+      REACT_APP_TIME_ZONE_OPTIONS: ${{ vars.TIME_ZONE_OPTIONS }}
+      REACT_APP_DEFAULT_TIME_ZONE: ${{ vars.DEFAULT_TIME_ZONE }}
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+        with:
+          # Required for auto commit step
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.BUILD_MGR_PAT }}
+
+      - name: Node Set up Environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: npm install common libraries
+        working-directory: ./
+        run: npm install
+
+      - name: Set environment variables for testing
+        if: matrix.isTestEnvironment
+        run: echo "REACT_APP_COMMIT_SHA=${{ github.sha }}" >> $GITHUB_ENV
+
+      - name: npm build
+        working-directory: .
+        run: npm run build:teamsapp
+
+      - name: Test the build
+        working-directory: packages/teamsapp
+        run: |
+          npm run test
+
+      - name: Az CLI Login
+        uses: Azure/actions/login@v1
+        with:
+          environment: dev
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: "Get the deployment application name"
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            AppName=$(az deployment sub show --name "${{ env.AZURE_WEBAPP_NAME }}" --query properties.outputs.application_name.value -o tsv)
+            echo "APP_NAME: $AppName"
+            echo "APP_NAME=$AppName" >> $GITHUB_ENV
+
+      # deploy web app using Azure credentials
+      - name: "Deploy to Azure Web App"
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.APP_NAME }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+      # Azure logout
+      - name: Azure CLI Logout
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az logout
+            az cache purge
+            az account clear

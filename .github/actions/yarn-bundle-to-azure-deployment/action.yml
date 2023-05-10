@@ -1,0 +1,47 @@
+name: Yarn Bundle Conversion
+description: Convert a yarn bundle to the format for an Azure App Service
+inputs:
+  source_folder:
+    description: Path to source files to bundle
+    required: true
+  main_path:
+    description: Relative path from source_folder to the main file
+    required: false
+    default: dist/main.js
+  output_file:
+    description: Location to save new bundle file
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Create bundle
+      working-directory: ${{ inputs.source_folder }}
+      run: |
+        BUNDLE_FOLDER=$(mktemp -d)
+
+        echo "::group::yarn bundle"
+        yarn bundle
+        echo "::endgroup::"
+
+        unzip bundle.zip -d $BUNDLE_FOLDER
+        echo "BUNDLE_FOLDER=$BUNDLE_FOLDER" >> $GITHUB_ENV
+
+        MAIN_PATH="$(basename $(pwd))/${{ inputs.main_path }}"
+        echo "MAIN_PATH=$MAIN_PATH" >> $GITHUB_ENV
+
+        rm bundle.zip
+      shell: bash
+    - name: Configure web.config
+      shell: bash
+      working-directory: ${{ env.BUNDLE_FOLDER }}/bundle
+      run: |
+        # Remove unnecessary files:
+        # - entrypoint.js that yarn bundle puts in
+        # - .yarn folder which is duplicating node_modules
+        rm entrypoint.js
+        rm -fr .yarn
+
+        cp $GITHUB_ACTION_PATH/web.config .
+        sed -i 's:MAIN_FILE_PATH:'$MAIN_PATH':g' web.config
+
+        zip -r ${{ inputs.output_file }} .

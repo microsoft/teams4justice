@@ -1,0 +1,37 @@
+{
+  "id": "<Court Guid>",
+  "type": "court",
+  "organisationId": "<Court Organization Name>",
+  "name": "<Court / Teams name>",
+  "ianaTimeZoneId": "<Default Time Zone>",
+  "terminologySets": [],
+  "defaultRooms": [
+    {
+      "roomType": "party",
+      "term": "DefendantPartiesRoom",
+      "expectedParticipantParty": "defendant"
+    },
+    {
+      "roomType": "party",
+      "term": "PlaintiffPartiesRoom",
+      "expectedParticipantParty": "applicant"
+    },
+    {
+      "roomType": "solo",
+      "term": "DefendantWitnessesRoom",
+      "expectedParticipantParty": "defendantWitness"
+    },
+    {
+      "roomType": "solo",
+      "term": "PlaintiffWitnessesRoom",
+      "expectedParticipantParty": "applicantWitness"
+    },
+    {
+      "roomType": "solo",
+      "term": "LobbyRoom",
+      "expectedParticipantParty": "other"
+    }
+  ],
+  "msGraphResourceUri": "",
+  "status": "Active"
+}

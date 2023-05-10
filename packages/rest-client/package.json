@@ -1,0 +1,27 @@
+{
+  "name": "@tfj/courtroom-management-api-client",
+  "version": "0.0.0",
+  "main": "dist/lib/src/index.js",
+  "types": "dist/lib/src/index.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "clean:dist": "rimraf dist",
+    "clean:misc": "rimraf yarn-error.log",
+    "clean": "run-p clean:dist clean:misc",
+    "start": "echo 'this is a library project, nothing to start'",
+    "lint": "echo 'this is auto-generated libraray, linting skipped'",
+    "test": "echo 'this is an auto-generated library, nothing to test'",
+    "watch": "tsc -b --w",
+    "generate": "autorest README.md"
+  },
+  "devDependencies": {
+    "autorest": "3.2.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {
+    "@azure/core-auth": "^1.3.2",
+    "@azure/core-client": "^1.2.1",
+    "tslib": "^2.2.0"
+  }
+}

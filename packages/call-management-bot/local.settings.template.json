@@ -1,0 +1,43 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "NODE_ENV": "Development",
+    "LOGGING_LEVEL": "debug",
+    "LOGGING_SERVICE": "call-management-bot",
+    "LOGGING_CONSOLE_LEVEL": "debug",
+    "LOGGING_APP_INSIGHTS_LEVEL": "debug",
+    "AZURE_AD_TENANT_ID": "",
+    "AZURE_AD_BOT_CLIENT_ID": "",
+    "AZURE_AD_BOT_CLIENT_SECRET": "",
+    "AZURE_AD_BOT_SERVICE_ACCOUNT_OBJECT_ID": "",
+    "AZURE_AD_BOT_SERVICE_ACCOUNT_UPN": "",
+    "AZURE_AD_BOT_SERVICE_ACCOUNT_PASSWORD": "",
+    "AZURE_AD_DOMAIN_NAME": "",
+    "APPINSIGHTS_INSTRUMENTATIONKEY": "",
+    "DEFAULT_TIME_ZONE": "EST",
+    "EventGridTopicEndpointUri": "",
+    "EventGridTopicKey": "",
+    "GRAPH_PUBLIC_ENDPOINT": true,
+    "GRAPH_BASE_URL": "https://graph.microsoft.com/",
+    "GRAPH_SCOPE": "https://graph.microsoft.com/.default",
+    "GRAPH_PRIVATE_BASE_URL": "https://canary.graph.microsoft.com/testprodbetacomms-next-internal/",
+    "GRAPH_PRIVATE_SCOPE": "https://canary.graph.microsoft.com/.default",
+    "HEARING_CONTROL_URL": "https://<ui app>.azurewebsites.net/hearing-control",
+    "ONLINE_MEETING_LIFECYCLE_MANAGEMENT_JOIN_BEFORE_START_DATE_MINUTES": "",
+    "ONLINE_MEETING_LIFECYCLE_MANAGEMENT_LEAVE_AFTER_END_DATE_MINUTES": "",
+    "NOTIFICATIONS_AUTH_ISSUER": "https://api.botframework.com",
+    "NOTIFICATIONS_AUTH_JWKS_URL": "https://api.aps.skype.com/v1/keys",
+    "NOTIFICATIONS_AUTH_JWKS_CACHE_MINUTES": 5,
+    "NOTIFICATIONS_AUTH_DISABLED": false,
+    "TEAMS_APP_ID": "",
+    "TEAMS_APP_NAME": "",
+    "TIME_ZONE_OPTIONS": "EST,CST,PST",
+    "HEARING_ORGANISER_EMAIL_ADDRESS_OVERRIDE": "",
+    "HEARING_ATTENDEE_EMAIL_ADDRESS_OVERRIDE": ""
+  },
+  "Host": {
+    "LocalHttpPort": 7071
+  }
+}

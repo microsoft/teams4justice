@@ -1,0 +1,85 @@
+{
+  "id": "<Organization GUID>",
+  "type": "organisation",
+  "name": "<Court Organization Name>",
+  "eventOrganiserEmail": "<Replace>",
+  "terminologySets": {
+    "default": [
+      {
+        "term": "Judge",
+        "value": "Judge",
+        "definition": "A person who presides over hearings"
+      },
+      {
+        "term": "Hearing",
+        "value": "Hearing",
+        "definition": "A proceeding before a court or other decision body"
+      },
+      {
+        "term": "Case",
+        "value": "Case",
+        "definition": "A dispute between opposing parties"
+      },
+      {
+        "term": "Plaintiff",
+        "value": "Plaintiff",
+        "definition": "Person/s who bring a case against another"
+      },
+      {
+        "term": "Defendant",
+        "value": "Defendant",
+        "definition": "Person/s being accused by another"
+      },
+      {
+        "term": "CourtStaff",
+        "value": "Court Staff",
+        "definition": "Person/s coordinating the function of the hearing"
+      },
+      {
+        "term": "Witness",
+        "value": "Witness",
+        "definition": "Person/s that give evidence"
+      },
+      {
+        "term": "OtherParticipants",
+        "value": "Other",
+        "definition": ""
+      },
+      {
+        "term": "DefendantPartiesRoom",
+        "value": "Defendant Parties Room",
+        "definition": "Name of the room with the defendant party"
+      },
+      {
+        "term": "PlaintiffPartiesRoom",
+        "value": "Plaintiff Parties Room",
+        "definition": "Name of the room with the plaintiff party"
+      },
+      {
+        "term": "PlaintiffWitnessesRoom",
+        "value": "Plaintiff Witnesses Room",
+        "definition": "Name of the room with the plaintiff witnesses"
+      },
+      {
+        "term": "DefendantWitnessesRoom",
+        "value": "Defendant Witnesses Room",
+        "definition": "Name of the room with the defendant witnesses"
+      },
+      {
+        "term": "LobbyRoom",
+        "value": "Lobby Room",
+        "definition": "Lobby Room"
+      }
+    ]
+  },
+  "commsTemplates": [
+    {
+      "templateUsage": "hearingInviteTemplate",
+      "templateMedium": "html",
+      "title": "[Organization Name] [CourtName] - [CaseNumber] [CaseTitle]",
+      "body": "&lt;html&gt;&lt;body&gt;&lt;b&gt;&nbsp;T4J-DEV Proceedings&nbsp;by&nbsp;Microsoft&nbsp;Teams&nbsp;&lt;/b&gt;&lt;p&gt;Your&nbsp;proceeding&nbsp;will&nbsp;be&nbsp;a&nbsp;held&nbsp;by&nbsp;video&nbsp;conference&nbsp;using&nbsp;Microsoft&nbsp;Teams.&nbsp;Microsoft&nbsp;Teams&nbsp;is&nbsp;a&nbsp;free&nbsp;program&nbsp;that&nbsp;connects&nbsp;people&nbsp;in&nbsp;different&nbsp;places&nbsp;by&nbsp;video&nbsp;call.&nbsp;&lt;/p&gt;&lt;p&gt;We&nbsp;have&nbsp;information&nbsp;on&nbsp;our&nbsp;website&nbsp;to&nbsp;help&nbsp;you&nbsp;get&nbsp;ready.&nbsp;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;&lt;a&nbsp;href=&quot;<mteamsproceedings-link>&#45;allparticipants.pdf&quot;&gt;&nbsp;Information&nbsp;for&nbsp;participants&nbsp;&lt;/a&gt;&nbsp;&lt;/li&gt;&lt;li&gt;&lt;a&nbsp;href=&quot;<mteamsproceedings-link>&#45;witnesses.pdf&quot;&gt;Extra&nbsp;information&nbsp;for&nbsp;witnesses&nbsp;&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;"
+    }
+  ],
+  "sendEmailToExternalParticipants": true,
+  "status": "Active"
+}

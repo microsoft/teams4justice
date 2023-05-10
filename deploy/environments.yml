@@ -1,0 +1,23 @@
+include:
+  - location: eastus2
+    orgName: contoso
+    projectName: t4j
+    resourceGroup: rg
+    storageAccount: sa
+    environmentName: dev
+    deploymentId: "001"
+    UIServiceName: teamsapp
+    APIServiceName: api
+    NotificationServiceName: notify
+    CallManagementServiceName: callbot
+    isTestEnvironment: true
+    pinnedRef: refs/heads/main
+    terraformBackendStorageAccountName: contosot4jdevsa
+    terraformResourceGroupName: contoso-t4j-dev-rg
+    terraformBackendStorageContainerName: terraform
+    keyVaultSasTokenId: https://kv-contoso-t4j-dev-001.vault.azure.net/storage/contosot4jdevsa/sas/BackendStateSASDefinition
+    secretArmClientId: T4J_CLIENT_ID
+    secretArmClientSecret: T4J_CLIENT_SECRET
+    secretSubscriptionId: T4J_SUBSCRIPTION_ID
+    secretTenantId: T4J_TENANT_ID
+    secretStorageSAS: T4J_STORAGE_SAS

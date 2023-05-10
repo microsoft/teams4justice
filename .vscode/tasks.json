@@ -1,0 +1,182 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Teams App Locally",
+      "dependsOn": [
+        "Validate prerequisites",
+        "Provision",
+        "Deploy",
+        "Start application"
+      ],
+      "dependsOrder": "sequence"
+    },
+    {
+      "label": "Start Teams App Locally for Mobile",
+      "dependsOn": [
+        "Validate prerequisites",
+        "Start local tunnel",
+        "Provision for mobile",
+        "Deploy",
+        "Start application",
+        "Show guideline for mobile preview"
+      ],
+      "dependsOrder": "sequence"
+    },
+    {
+      // Check all required prerequisites.
+      // See https://aka.ms/teamsfx-tasks/check-prerequisites to know the details and how to customize the args.
+      "label": "Validate prerequisites",
+      "type": "teamsfx",
+      "command": "debug-check-prerequisites",
+      "args": {
+        "prerequisites": [
+          "nodejs", // Validate if Node.js is installed.
+          "m365Account", // Sign-in prompt for Microsoft 365 account, then validate if the account enables the sideloading permission.
+          "portOccupancy" // Validate available ports to ensure those debug ones are not occupied.
+        ],
+        "portOccupancy": [
+          53000 // tab service port
+        ]
+      }
+    },
+    {
+      // Start the local tunnel service to forward public URL to local port and inspect traffic.
+      // See https://aka.ms/teamsfx-tasks/local-tunnel for the detailed args definitions.
+      "label": "Start local tunnel",
+      "type": "teamsfx",
+      "command": "debug-start-local-tunnel",
+      "args": {
+        "type": "dev-tunnel",
+        "ports": {
+          "tab": {
+            "portNumber": 53000,
+            "protocol": "https",
+            "access": "private"
+          }
+        },
+        "env": "local",
+        "output": {
+          "tab": {
+            "endpoint": "TAB_ENDPOINT",
+            "domain": "TAB_DOMAIN"
+          },
+          "id": "DEV_TUNNEL_ID"
+        }
+      },
+      "isBackground": true,
+      "problemMatcher": "$teamsfx-local-tunnel-watch"
+    },
+    {
+      // Create the debug resources.
+      // See https://aka.ms/teamsfx-tasks/provision to know the details and how to customize the args.
+      "label": "Provision",
+      "type": "teamsfx",
+      "command": "provision",
+      "args": {
+        "env": "local"
+      }
+    },
+    {
+      // Create the debug resources.
+      // See https://aka.ms/teamsfx-tasks/provision to know the details and how to customize the args.
+      "label": "Provision for mobile",
+      "type": "teamsfx",
+      "command": "provision",
+      "args": {
+        "env": "local"
+      },
+      "options": {
+        "env": {
+          "ENABLE_MOBILE": "true"
+        }
+      }
+    },
+    {
+      // Build project.
+      // See https://aka.ms/teamsfx-tasks/deploy to know the details and how to customize the args.
+      "label": "Deploy",
+      "type": "teamsfx",
+      "command": "deploy",
+      "args": {
+        "env": "local"
+      }
+    },
+    {
+      "label": "Start application",
+      "dependsOn": ["Start frontend"]
+    },
+    {
+      "label": "Start frontend",
+      "type": "shell",
+      "command": "npm run dev:teamsfx",
+      "isBackground": true,
+      "options": {
+        "cwd": "${workspaceFolder}/packages/teamsapp"
+      },
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^.*$",
+          "file": 0,
+          "location": 1,
+          "message": 2
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": "Compiled|Failed|compiled|failed"
+        }
+      }
+    },
+    {
+      "label": "Show guideline for mobile preview",
+      "type": "teamsfx",
+      "command": "mobile-preview",
+      "args": {
+        "manifest": "${workspaceFolder}/build/appPackage/manifest.local.json"
+      }
+    },
+    {
+      "label": "API - Build (TypeScript only)",
+      "type": "npm",
+      "script": "build:api",
+      "path": ".",
+      "problemMatcher": ["$tsc"],
+      "group": "build"
+    },
+    {
+      "label": "Build - Bot Listener (TypeScript only)",
+      "type": "npm",
+      "script": "build:callbot",
+      "path": ".",
+      "isBackground": false,
+      "problemMatcher": ["$tsc"],
+      "group": "build"
+    },
+    {
+      "label": "runFunctionsHost",
+      "type": "shell",
+      "options": {
+        "cwd": "./packages/call-management-bot",
+        "env": {
+          "languageWorkers:node:arguments": "--inspect=5858"
+        }
+      },
+      "command": "func host start",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": "$func-node-watch",
+      "dependsOn": "Build - Bot Listener (TypeScript only)"
+    },
+    {
+      "label": "CosmosDB - Build (TypeScript only)",
+      "type": "npm",
+      "script": "build",
+      "path": "./utilities/cosmosdb-config",
+      "problemMatcher": ["$tsc"],
+      "group": "build"
+    }
+  ]
+}

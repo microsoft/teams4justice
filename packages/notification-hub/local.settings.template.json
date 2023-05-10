@@ -1,0 +1,19 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "",
+    "AZURE_AD_ISSUER_URL": "",
+    "AZURE_AD_REST_API_CLIENT_ID": "",
+    "AZURE_AD_AUTH_DISABLED": false,
+    "AZURE_AD_JWKS_URL": "",
+    "AZURE_AD_JWKS_CACHE_MINUTES": "",
+    "AzureSignalRConnectionString": "<SIGNALR_CONNECTION_STRING>",
+    "AzureSignalRServiceTransportType": "Transient",
+    "FUNCTIONS_WORKER_RUNTIME": "node"
+  },
+  "Host": {
+    "LocalHttpPort": 7075,
+    "CORS": "http://localhost:3000",
+    "CORSCredentials": true
+  }
+}

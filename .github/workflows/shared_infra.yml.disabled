@@ -1,0 +1,67 @@
+name: Shared Infrastructure Deployment
+
+on:
+  push:
+    branches:
+      - main
+      - release/**
+    paths:
+      - ".github/workflows/shared_infra.yml"
+      - "terraform/shared/**"
+      - "deploy/environments.yml"
+  workflow_dispatch:
+
+concurrency: ${{ github.workflow }}
+
+jobs:
+  load_environments:
+    name: Load Environment matrix
+    runs-on: ubuntu-latest
+    outputs:
+      environment_matrix: ${{ steps.yaml2json.outputs.data }}
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+      - name: YAML to JSON Converter
+        id: yaml2json
+        uses: fabasoad/yaml-json-xml-converter-action@v1.0.11
+        with:
+          path: deploy/environments.yml
+          from: yaml
+          to: json
+  infra_deploy:
+    name: Deploy Shared Infra
+    runs-on: ubuntu-latest
+    needs: ["load_environments"]
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.load_environments.outputs.environment_matrix) }}
+    env:
+      ARM_CLIENT_ID: ${{ secrets[matrix.secretArmClientId] }}
+      ARM_CLIENT_SECRET: ${{ secrets[matrix.secretArmClientSecret] }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets[matrix.secretSubscriptionId] }}
+      ARM_TENANT_ID: ${{ secrets[matrix.secretTenantId] }}
+    steps:
+      - name: Checkout the repository
+        if: ${{ github.ref == matrix.pinnedRef }}
+        uses: actions/checkout@v2
+      - name: Setup Terraform
+        if: ${{ github.ref == matrix.pinnedRef }}
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.15.1
+          terraform_wrapper: false
+      - name: Deploy Infrastructure
+        if: ${{ github.ref == matrix.pinnedRef }}
+        uses: ./.github/actions/run-terraform-deploy
+        with:
+          backendStorageAccountName: ${{ matrix.terraformBackendStorageAccountName }}
+          backendStorageContainerName: ${{ matrix.terraformBackendStorageContainerName }}
+          backendStateFile: shared.tfstate
+          backendKeyVaultSasTokenId: ${{ matrix.keyVaultSasTokenId }}
+          terraformWorkspace: ${{ matrix.environmentName }}
+          terraformPath: terraform/shared
+          terraformArgs: >
+            -var 'resource_group_name=${{ matrix.resourceGroupName }}'
+            -var 'storage_account_name=${{ matrix.storageAccountName }}'
+            -var 'is_test_environment=${{ matrix.isTestEnvironment }}'

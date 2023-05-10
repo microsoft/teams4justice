@@ -1,0 +1,80 @@
+name: Validate Terraform
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - terraform/**
+      - .github/workflows/terraform.yml
+
+jobs:
+  cancel_duplicates:
+    name: Cancel duplicate jobs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: fkirc/skip-duplicate-actions@master
+        with:
+          github_token: ${{ secrets.PAT || secrets.GITHUB_TOKEN }}
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+        # Run only terraform linting
+      # - name: Mega-linter
+      #   uses: megalinter/megalinter/flavors/terraform@v5.10.0
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     VALIDATE_ALL_CODEBASE: false
+      #     DISABLE: COPYPASTE,EDITORCONFIG,MARKDOWN,JSON,YAML
+
+  validate:
+    name: Validate and Format Terraform
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        script:
+          [
+            "api",
+            "api_post",
+            "call_management_bot",
+            "call_management_bot_post",
+            "notification_hub",
+            "notification_hub_post",
+            "shared",
+            "ui",
+          ]
+    defaults:
+      run:
+        working-directory: terraform/${{ matrix.script }}
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.BUILD_MGR_PAT }}
+
+      - uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.15.1
+
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -recursive
+
+      - name: Auto commit format changes
+        if: ${{ steps.fmt.outputs.stdout != '' }}
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
+          commit_message: Terraform fmt fixes
+
+      - name: Terraform Init
+        run: terraform init -backend=false
+
+      - name: Terraform Validate
+        run: terraform validate

@@ -1,0 +1,3 @@
+{
+    "Exclude": ["dist/", "**/swagger.json"]
+}

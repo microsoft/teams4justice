@@ -1,0 +1,42 @@
+name: "Compile Mermaid in Markdown"
+
+on:
+  pull_request:
+    paths:
+      - "**/*.md"
+
+jobs:
+  mermaid:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+          token: ${{ secrets.BUILD_MGR_PAT }}
+
+      - uses: jitterbit/get-changed-files@v1
+        id: filesChanged
+
+      - id: files
+        name: Filter files
+        run: |
+          FILES=$(echo ${{ steps.filesChanged.outputs.all }} | sed 's/ /\n/g' | grep -e '.*\.md$' | xargs)
+          echo $FILES
+          echo "::set-output name=files::$FILES"
+
+      - name: compile mermaid
+        uses: neenjaw/compile-mermaid-markdown-action@v0.3.3
+        with:
+          files: ${{ steps.files.outputs.files }}
+          output: docs/images
+        env:
+          HIDE_CODEBLOCKS: 1
+          ABSOLUTE_IMAGE_LINKS: ""
+          MMDC_EXTRA_ARGS: -c .github/workflows/mermaid.json
+
+      - name: Commit and push applied linter fixes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
+          commit_message: "Commit updated mermaid diagrams"

@@ -1,0 +1,68 @@
+name: Run Terraform Deployment
+description: Runs terraform deployment for the given microservice
+inputs:
+  backendStorageAccountName:
+    description: Name of the storage account that stores the terraform state files
+    required: true
+  backendStorageContainerName:
+    description: Name of the container that stores the terraform state files
+    required: true
+  backendStateFile:
+    description: Name of the state file for terraform
+    required: true
+  backendKeyVaultSasTokenId:
+    description: ID of the Key Vault secret containing the SAS Token used to access the backend storage account
+    required: true
+  terraformWorkspace:
+    description: Name of the terraform workspace to use (tied to the environment)
+    required: true
+  terraformPath:
+    description: Path to the terraform files to deploy
+    required: true
+  terraformArgs:
+    description: Arguments to pass to the terraform plan
+    required: false
+    default: ""
+  terraformLogs:
+    description: Arguments to pass to the terraform tracing env variable
+    required: false
+    default: ""
+runs:
+  using: "composite"
+  steps:
+    - name: Get SAS Token for Storage Backend
+      shell: bash
+      run: |
+        echo "T4J_STORAGE_SAS: $ARM_SAS_TOKEN"
+        if [[ -z "$ARM_SAS_TOKEN" ]]; then
+          echo "T4J_CLIENT_ID: $ARM_CLIENT_ID"
+          echo "T4J_CLIENT_SECRET: $ARM_CLIENT_SECRET"
+          echo "T4J_TENANT_ID: $ARM_TENANT_ID"
+          echo "T4J_SUBSCRIPTION_ID: $ARM_SUBSCRIPTION_ID"
+          az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+          # SECRET_ID=$(az keyvault storage sas-definition show --id ${{ inputs.backendKeyVaultSasTokenId }} --query "secretId" --output tsv)
+          # SAS_TOKEN=$(az keyvault secret show --id $SECRET_ID --query="value" --output tsv)
+          SAS_TOKEN=$ARM_SAS_TOKEN
+          echo "SECRET_ID: $SECRET_ID"
+          echo "SAS_TOKEN: $SAS_TOKEN"
+          echo "::add-mask::$SAS_TOKEN"
+          echo "ARM_SAS_TOKEN=$SAS_TOKEN" >> $GITHUB_ENV
+        fi
+    - name: "Terraform Init"
+      shell: bash
+      working-directory: ${{ inputs.terraformPath }}
+      run: |
+        echo "Terraform Trace: ${{ inputs.terraformLogs }}"
+        export TF_LOG=${{ inputs.terraformLogs }}
+        terraform init -backend-config="resource_group_name=${{ inputs.backendResourceGroupName }}" \
+                       -backend-config="storage_account_name=${{ inputs.backendStorageAccountName }}" \
+                       -backend-config="container_name=${{ inputs.backendStorageContainerName }}" \
+                       -backend-config="key=${{ inputs.backendStateFile }}"
+        terraform workspace list
+        terraform workspace select ${{ inputs.terraformWorkspace }} || terraform workspace new ${{ inputs.terraformWorkspace }}
+    - name: "Terraform Plan & Apply"
+      shell: bash
+      working-directory: ${{ inputs.terraformPath }}
+      run: |
+        terraform plan -out=plan ${{ inputs.terraformArgs }}
+        terraform apply -auto-approve plan

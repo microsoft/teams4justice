@@ -1,0 +1,18 @@
+{
+  "id": "<Courtroom Guid>",
+  "type": "courtroom",
+  "courtId": "<Same as Court Id Guid>",
+  "organisationId": "<Court Organization Name>",
+  "name": "<Courtroom / Teams Channel name>",
+  "presidingJudges": [
+    {
+      "id": "<AAD object-id>",
+      "title": "Judge",
+      "firstName": "<replace>",
+      "lastName": "<replace>",
+      "email": "<replace>"
+    }
+  ],
+  "msGraphResourceUri": "<Teams Channel URI 19:00000000000000000000000@thread.tacv2>",
+  "status": "Active"
+}

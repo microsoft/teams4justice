@@ -1,0 +1,111 @@
+name: API Build & Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - release/**
+    paths:
+      - ".github/workflows/api.yml"
+      - "src/api/**"
+      - "src/shared/**"
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+env:
+  AZURE_WEBAPP_NAME: api-contoso-t4j-dev-001 # set this to your application's name
+  AZURE_WEBAPP_PACKAGE_PATH: "." # set this to the path to your web app project, defaults to the repository root
+  NODE_VERSION: "16.x" # set this to the node version to use
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build_and_deploy:
+    name: API Build and Deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+    env:
+      TIME_ZONE_OPTIONS: ${{ vars.TIME_ZONE_OPTIONS }}
+      DEFAULT_TIME_ZONE: ${{ vars.DEFAULT_TIME_ZONE }}
+    # outputs:
+    #   environment_matrix: ${{ steps.yaml2json.outputs.data }}
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@main
+        with:
+          # Required for auto commit step
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.BUILD_MGR_PAT }}
+
+      - name: Setup Node ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+
+      - name: npm install, build & test
+        working-directory: ./
+        run: |
+          npm install
+          npm run build:api --if-present
+          npm run test:api --if-present
+
+      #- name: npm build
+      #  working-directory: ./
+      #  run: npm run build:api
+
+      #- name: Test the build
+      #  working-directory: ./
+      #  run: |
+      #    npm run test:api
+
+      # - name: Upload API code for deployment job
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: api-app
+      #     path: ./packages/api/dist
+
+      # - name: Upload Node Modules for deployment job
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: api-packages
+      #     path: ./node_modules
+
+      - name: Az CLI Login
+        uses: Azure/actions/login@v1
+        with:
+          environment: dev
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: "Get the deployment application name"
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            AppName=$(az deployment sub show --name "${{ env.AZURE_WEBAPP_NAME }}" --query properties.outputs.application_name.value -o tsv)
+            echo "APP_NAME: $AppName"
+            echo "APP_NAME=$AppName" >> $GITHUB_ENV
+
+      # - name: Download all workflow run artifacts
+      #   uses: actions/download-artifact@v3
+
+      # deploy web app using Azure credentials
+      - name: "Deploy to Azure Web App"
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2.2.6
+        with:
+          app-name: ${{ env.APP_NAME }}
+          slot-name: production
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          startup-command: "node dist/main"
+
+      # Azure logout
+      - name: Azure CLI Logout
+        uses: azure/CLI@v1
+        with:
+          inlineScript: |
+            az logout
+            az cache purge
+            az account clear

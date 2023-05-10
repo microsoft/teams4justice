@@ -1,0 +1,21 @@
+@nhBaseUrl = http://localhost:7075/api
+
+@nhNegotiateUrl = {{nhBaseUrl}}/negotiate
+@nhSendMessageSampleUrl = {{nhBaseUrl}}/messages
+
+###
+
+// @name negotiate
+POST {{nhNegotiateUrl}}
+Content-Type: application/json
+
+###
+
+// @name sendMessageSample
+POST {{nhSendMessageSampleUrl}}
+Content-Type: application/json
+
+{
+    "sender": "My username",
+    "text": "My SignalR message"
+}

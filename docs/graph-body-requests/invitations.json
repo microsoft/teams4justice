@@ -1,0 +1,22 @@
+{
+  "invitedUserDisplayName": "<user's display name>",
+  "invitedUserEmailAddress": "email address",
+  "invitedUserMessageInfo": {
+    "@odata.type": "microsoft.graph.invitedUserMessageInfo",
+    "ccRecipients": [
+      {
+        "@odata.type": "microsoft.graph.recipient"
+      }
+    ],
+    "customizedMessageBody": "Email message body",
+    "messageLanguage": "en"
+  },
+  "sendInvitationMessage": true,
+  "inviteRedirectUrl": "redirect url",
+  "inviteRedeemUrl": "",
+  "status": "",
+  "invitedUser": {
+    "@odata.type": "microsoft.graph.user"
+  },
+  "invitedUserType": "Guest"
+}

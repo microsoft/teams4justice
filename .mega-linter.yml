@@ -1,0 +1,47 @@
+APPLY_FIXES: all
+DEFAULT_BRANCH: main
+FORMATTERS_DISABLE_ERRORS: false
+FILTER_REGEX_EXCLUDE: (dist/|node_modules/|build/|rest-client/|api/.*\.json)
+ENABLE:
+  - BASH
+  - COPYPASTE
+  - EDITORCONFIG
+  - ENV
+  - HTML
+  - JAVASCRIPT
+  - JSON
+  - JSX
+  - MARKDOWN
+  - TERRAFORM
+  - TSX
+  - TYPESCRIPT
+  - YAML
+DISABLE_LINTERS:
+  # ESLint disabled due to two issues:
+  # 1. https://github.com/nvuillam/mega-linter/issues/374 - requires .eslintrc.json file to be in the root folder (not
+  #    blocking, but not ideal)
+  # 2. https://github.com/nvuillam/mega-linter/issues/419 - local runs of ESlint fail due to the typescript plugin not
+  #    being able to resolve the tsconfig.json (not blocking)
+  # ESLint is currently being run when running `yarn build` and works in VS Code. Once these two issues are fixed, it
+  # can be removed from run scripts and instead be run here.
+  - JAVASCRIPT_STANDARD
+  - JAVASCRIPT_ES
+  - JSX_ESLINT
+  - MARKDOWN_MARKDOWN_TABLE_FORMATTER
+  - TERRAFORM_TERRAFORM_FMT
+  - TERRAFORM_CHECKOV
+  - TSX_ESLINT
+  - TYPESCRIPT_STANDARD
+  - TYPESCRIPT_ES
+  - TERRAFORM_KICS
+
+# Linter specific settings
+MARKDOWN_MARKDOWNLINT_CONFIG_FILE: .markdown-lint.yml
+TYPESCRIPT_DEFAULT_STYLE: prettier
+TYPESCRIPT_PRETTIER_CONFIG_FILE: .prettierrc.json
+TYPESCRIPT_PRETTIER_RULES_PATH: src/
+BASH_FILTER_REGEX_EXCLUDE: (.devcontainer/)
+YAML_V8R_FILTER_REGEX_EXCLUDE: .github/workflows/.*\.yml
+
+# Disable terrascan due to use of experimental features breaking it
+TERRAFORM_TERRASCAN_FILTER_REGEX_EXCLUDE: modules/event_grid_subscriptions/main.tf

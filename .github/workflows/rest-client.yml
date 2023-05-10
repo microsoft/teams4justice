@@ -1,0 +1,44 @@
+# This workflow will automatically create a PR when the input OpenAPI JSON is modified in the main branch.
+
+name: Generate REST client
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/rest-client.yml"
+      - "src/api/swagger.json"
+      - "src/rest-client/README.md"
+      - "src/rest-client/package.json"
+      - "src/rest-client/fakes/**/*"
+
+jobs:
+  generate_rest_client:
+    name: Generate REST client
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+        with:
+          # Required for auto commit step
+          ref: ${{ github.head_ref }}
+          token: ${{ secrets.BUILD_MGR_PAT }}
+
+      - name: Generate new client
+        working-directory: src/rest-client
+        run: |
+          yarn install
+          yarn run generate
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: "Update REST client based on latest API definition"
+          assignees: ${{ github.actor }}
+          commit_message: Update rest-client with new definition
+          body: >
+            The OpenAPI definition of the REST API has been updated. This PR represents the
+            auto-generation of the client API based off of that latest definition.
+          branch: auto/update-rest-client
+          delete-branch: true
+          token: ${{ secrets.BUILD_MGR_PAT }}

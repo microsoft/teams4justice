@@ -1,0 +1,27 @@
+{
+  "name": "t4j-root",
+  "version": "1.0.0",
+  "author": "Danny Garber",
+  "license": "MIT",
+  "engines": {
+    "npm": "8.19.4",
+    "node": "16.20.0"
+  },
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "cache": "lerna add-caching",
+    "graph": "nx graph",
+    "build": "lerna run build",
+    "build:teamsapp": "lerna run build --scope=teamsapp",
+    "build:api": "lerna run build --scope=api",
+    "build:callbot": "lerna run build --scope=call-management-bot",
+    "start:api": "lerna run start:debug --scope=api",
+    "test:api": "lerna run test --scope=api"
+  },
+  "workspaces": [
+    "./packages/*"
+  ],
+  "devDependencies": {
+    "lerna": "^6.6.1"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "servicePrincipalObjectId": {
+    "value": "service principal object id"
+  },
+  "servicePrincipalPassword": {
+    "value": "service principal password"
+  },
+  "defaultTimeZone": { "value": "default Time Zone, eg. America/New_York" },
+  "timeZoneOptions": {
+    "value": "Time Zone Options for your geography; e.g. America/New_York, America/Chicago, America/Denver, America/Los_Angeles, America/Juneau,Pacific/Honolulu"
+  },
+  "publicNetworkAccess": { "value": "Enabled/Disabled" },
+  "msaAppType": { "value": "MultiTenant/SingleTenant" },
+  "msaTeamsAppId": { "value": "UI Teams App AAD App Client Id" },
+  "msaCallBotAppId": { "value": "Call Bot AAD App Client Id" },
+  "msaApiAppId": { "value": "API AAD App Client Id" }
+}

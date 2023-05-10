@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "declarationMap": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "preserveConstEnums": true,
+    "lib": ["es6", "dom"],
+    "outDir": "./dist",
+    "composite": true,
+    "importHelpers": true
+  },
+  "exclude": ["dist", "coverage", "node_modules"]
+}

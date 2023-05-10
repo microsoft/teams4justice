@@ -1,0 +1,31 @@
+name: Yarn Bundle Conversion
+description: Convert a yarn bundle to the format for an Azure Function
+inputs:
+  source_folder:
+    description: Path to source files to bundle
+    required: true
+  output_file:
+    description: Location to save new bundle file
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Create bundle
+      working-directory: ${{ inputs.source_folder }}
+      shell: bash
+      run: |
+        TMP_DIR=$(mktemp -d)
+
+        echo "::group::yarn bundle"
+        yarn bundle
+        echo "::endgroup::"
+
+        unzip bundle.zip -d $TMP_DIR
+        SRC_FOLDER=$(basename ${{ inputs.source_folder }})
+
+        cd $TMP_DIR/bundle
+        mv node_modules $SRC_FOLDER
+        mv shared $SRC_FOLDER
+
+        cd $SRC_FOLDER
+        zip -r ${{ inputs.output_file }} .

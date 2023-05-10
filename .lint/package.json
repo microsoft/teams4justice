@@ -1,0 +1,34 @@
+{
+  "name": "dannyg",
+  "version": "1.0.0",
+  "description": "For Lint purposes only",
+  "main": "index.js",
+  "repository": "https://github.com/microsoft/teams4justice.git",
+  "author": "dannyg@microsoft.com",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "lint:prettier": "prettier --check .",
+    "lint:prettier:fix": "prettier --write .",
+    "lint:eslint": "eslint",
+    "lint:eslint:fix": "eslint --fix",
+    "lint:fix": "run-s lint:prettier:fix lint:eslint:fix",
+    "lint": "run-s lint:prettier lint:eslint"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.4.1",
+    "@typescript-eslint/parser": "^4.22.0",
+    "eslint": "^7.24.0",
+    "eslint-config-airbnb-typescript": "^12.3.1",
+    "eslint-config-prettier": "^8.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.3.0",
+    "rimraf": "^3.0.2"
+  },
+  "eslintIgnore": [
+    "src",
+    "node_modules",
+    "src/**"
+  ]
+}

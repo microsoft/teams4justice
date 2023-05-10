@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "CosmosDB - Build (TypeScript only)",
+      "type": "npm",
+      "script": "build",
+      "path": ".",
+      "problemMatcher": ["$tsc"],
+      "group": "build"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "resolveJsonModule": false,
+    "composite": true,
+    "outDir": "./dist",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "files": [],
+  "references": [
+    // {
+    //   "path": "./tsconfig.lib.json"
+    // },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
+}

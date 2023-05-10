@@ -1,0 +1,87 @@
+[
+  {
+    "resourceAppId": "00000003-0000-0000-c000-000000000000",
+    "resourceAccess": [
+      {
+        "id": "1ca167d5-1655-44a1-8adf-1414072e1ef9",
+        "type": "Scope"
+      },
+      {
+        "id": "e1fe6dd8-ba31-4d61-89e7-88639da4683d",
+        "type": "Scope"
+      },
+      {
+        "id": "116b7235-7cc6-461e-b163-8e55691d839e",
+        "type": "Scope"
+      },
+      {
+        "id": "ef54d2bf-783f-4e0f-bca1-3210c0444d99",
+        "type": "Scope"
+      },
+      {
+        "id": "a7a681dc-756e-4909-b988-f160edc6655f",
+        "type": "Scope"
+      },
+      {
+        "id": "284383ee-7f6e-4e40-a2a8-e85dcb029101",
+        "type": "Scope"
+      },
+      {
+        "id": "4c277553-8a09-487b-8023-29ee378d8324",
+        "type": "Scope"
+      },
+      {
+        "id": "f6b49018-60ab-4f81-83bd-22caeabfed2d",
+        "type": "Scope"
+      },
+      {
+        "id": "fd7ccf6b-3d28-418b-9701-cd10f5cd2fd4",
+        "type": "Scope"
+      },
+      {
+        "id": "6b7d71aa-70aa-4810-a8d9-5d9fb2830017",
+        "type": "Scope"
+      },
+      {
+        "id": "294ce7c9-31ba-490a-ad7d-97a7d075e4ed",
+        "type": "Scope"
+      },
+      {
+        "id": "c1684f21-1984-47fa-9d61-2dc8c296bb70",
+        "type": "Scope"
+      },
+      {
+        "id": "b8bb2037-6e08-44ac-a4ea-4674e010e2a4",
+        "type": "Scope"
+      },
+      {
+        "id": "9e19bae1-2623-4c4f-ab6e-2664615ff9a0",
+        "type": "Scope"
+      },
+      {
+        "id": "5dad17ba-f6cc-4954-a5a2-a0dcc95154f0",
+        "type": "Scope"
+      },
+      {
+        "id": "49981c42-fd7b-4530-be03-e77b21aed25e",
+        "type": "Scope"
+      },
+      {
+        "id": "46890524-499a-4bb2-ad64-1476b4f3e1cf",
+        "type": "Scope"
+      },
+      {
+        "id": "fd9ce730-a250-40dc-bd44-8dc8d20f39ea",
+        "type": "Scope"
+      },
+      {
+        "id": "09850681-111b-4a89-9bed-3f2cae46d706",
+        "type": "Scope"
+      },
+      {
+        "id": "df021288-bdef-4463-88db-98f22de89214",
+        "type": "Scope"
+      }
+    ]
+  }
+]

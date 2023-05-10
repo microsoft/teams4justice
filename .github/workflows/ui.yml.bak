@@ -1,0 +1,152 @@
+# This workflow helps generate the deployable zipped artifact for the Justice system.
+
+name: UI Build and Deploy
+on:
+  push:
+    branches:
+      - main
+      - release/**
+    paths:
+      - ".github/workflows/ui.yml"
+      - ".github/action/yarn-bundle-to-azure-deployment/**"
+      - "deploy/environments.yml"
+      - "deploy/deploy_app_service.sh"
+      - "deploy/deploy_webapp.sh"
+      - "src/rest-client/**"
+      - "src/ui/**"
+      - "terraform/ui/**"
+  workflow_dispatch:
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+env:
+  NODE_VERSION: "16.x"
+
+jobs:
+  load_environments:
+    name: Load Environment matrix
+    runs-on: ubuntu-latest
+    outputs:
+      environment_matrix: ${{ steps.yaml2json.outputs.data }}
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+      - name: YAML to JSON Converter
+        id: yaml2json
+        uses: fabasoad/yaml-json-xml-converter-action@v1.0.11
+        with:
+          path: deploy/environments.yml
+          from: yaml
+          to: json
+  ui_build:
+    name: Build & Deploy environment specific UI packages
+    runs-on: ubuntu-latest
+    needs: ["load_environments"]
+    strategy:
+      matrix: ${{ fromJson(needs.load_environments.outputs.environment_matrix) }}
+    environment:
+      name: dev
+    env:
+      TIME_ZONE_OPTIONS: ${{ vars.TIME_ZONE_OPTIONS }}
+      DEFAULT_TIME_ZONE: ${{ vars.DEFAULT_TIME_ZONE }}
+      REACT_APP_TIME_ZONE_OPTIONS: ${{ vars.TIME_ZONE_OPTIONS }}
+      REACT_APP_DEFAULT_TIME_ZONE: ${{ vars.DEFAULT_TIME_ZONE }}
+    steps:
+      - name: Node Set up Environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+
+      - name: yarn install
+        working-directory: src/
+        run: yarn install
+
+      - name: Set environment variables for testing
+        if: matrix.isTestEnvironment
+        run: echo "REACT_APP_COMMIT_SHA=${{ github.sha }}" >> $GITHUB_ENV
+
+      - name: yarn build
+        working-directory: src/ui
+        run: yarn build:${{ matrix.environmentName }}
+
+      - name: Test the build
+        working-directory: src/ui
+        run: |
+          yarn test
+
+      - name: Pack UI
+        working-directory: src/ui/build
+        run: |
+          zip -r ui_service.zip .
+
+      - name: UI artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ui_${{ matrix.environmentName }}
+          path: src/ui/build/ui_service.zip
+  ui_deploy:
+    name: Deploy and update infrastructure
+    runs-on: ubuntu-latest
+    needs: ["load_environments", "ui_build"]
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.load_environments.outputs.environment_matrix) }}
+    environment:
+      name: dev
+    env:
+      ARM_CLIENT_ID: ${{ secrets[matrix.secretArmClientId] }}
+      ARM_CLIENT_SECRET: ${{ secrets[matrix.secretArmClientSecret] }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets[matrix.secretSubscriptionId] }}
+      ARM_TENANT_ID: ${{ secrets[matrix.secretTenantId] }}
+      ARM_SAS_TOKEN: ${{ secrets[matrix.secretStorageSAS] }}
+      TIME_ZONE_OPTIONS: ${{ vars.TIME_ZONE_OPTIONS }}
+      DEFAULT_TIME_ZONE: ${{ vars.DEFAULT_TIME_ZONE }}
+      REACT_APP_TIME_ZONE_OPTIONS: ${{ vars.TIME_ZONE_OPTIONS }}
+      REACT_APP_DEFAULT_TIME_ZONE: ${{ vars.DEFAULT_TIME_ZONE }}
+    steps:
+      - name: Checkout the repository
+        if: ${{ github.ref == matrix.pinnedRef }}
+        uses: actions/checkout@v2
+      # - name: Setup Terraform
+      #   if: ${{ github.ref == matrix.pinnedRef }}
+      #   uses: hashicorp/setup-terraform@v1
+      #   with:
+      #     terraform_version: 0.15.1
+      #     terraform_wrapper: false
+      - uses: actions/download-artifact@v2
+        if: ${{ github.ref == matrix.pinnedRef }}
+        with:
+          name: ui_${{ matrix.environmentName }}
+          path: ~/artifacts/
+      # - name: Deploy Infrastructure
+      #   uses: ./.github/actions/run-terraform-deploy
+      #   if: ${{ github.ref == matrix.pinnedRef }}
+      #   with:
+      #     backendResourceGroupName: ${{ matrix.terraformResourceGroupName }}
+      #     backendStorageAccountName: ${{ matrix.terraformBackendStorageAccountName }}
+      #     backendStorageContainerName: ${{ matrix.terraformBackendStorageContainerName }}
+      #     backendStateFile: ui.tfstate
+      #     backendKeyVaultSasTokenId: ${{ matrix.keyVaultSasTokenId }}
+      #     terraformWorkspace: ${{ matrix.environmentName }}
+      #     terraformPath: terraform/ui
+      #     terraformLogs: ${{ vars.TF_LOG }}
+      #     terraformArgs: >
+      #       -var 'location=${{ matrix.location }}'
+      #       -var 'org_name=${{ matrix.orgName }}'
+      #       -var 'project_name=${{ matrix.projectName }}'
+      #       -var 'api_service_name=${{ matrix.APIServiceName }}'
+      #       -var 'bot_app_id=${{ vars.UI_REGISTRATION_APP_ID }}'
+      #       -var 'application_insights_type=${{ vars.APP_PLATFORM }}'
+      #       -var 'time_zone_options=${{ vars.TIME_ZONE_OPTIONS }}'
+      #       -var 'default_time_zone=${{ vars.DEFAULT_TIME_ZONE }}'
+      #       -var 'lock_resource_group=${{ vars.LOCK_RESOURCE_GROUP }}'
+      - name: Deploy Applications
+        if: ${{ github.ref == matrix.pinnedRef }}
+        run: |
+          chmod +x ./deploy/deploy_webapp.sh
+          chmod +x ./deploy/deploy_app_service.sh
+          az login --service-principal -u $ARM_CLIENT_ID -p $ARM_CLIENT_SECRET --tenant $ARM_TENANT_ID
+          ./deploy/deploy_webapp.sh -g rg-${{ matrix.orgName }}-${{ matrix.projectName }} -e ${{ matrix.environmentName }} -d ${{ matrix.deploymentId }} -b ${{ matrix.UIServiceName }} -a "~/artifacts/ui_service.zip" -s "src/ui/deploy/"
