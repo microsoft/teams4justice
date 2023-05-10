@@ -6,6 +6,7 @@ Param(
     [string]$title,
     [string]$scopeName,
     [string]$deploymentId,
+    [int]$waitTime = 0,
     [bool]$isWebApp = $false,
     [string]$apiAppId = '',
     [string]$apiScopeId = ''
@@ -53,6 +54,36 @@ function testParams {
 	}
 }
 
+
+function GrantAdminConsentWaitForCompletion() {
+    param(
+        [Parameter( Mandatory = $true)]
+        $AppId,
+        [Parameter( Mandatory = $true)]
+        $WaitTime
+    )
+
+    # Check for the application registration instance existence
+    $retryCount = 0
+    $retries = $WaitTime / 10
+    Write-Host "Please wait for all the changes are replicated into tenant... The script will continue to run after $($WaitTime) seconds."
+    do {
+        # Grant admin consent to the App Registration
+        az ad app permission admin-consent --id $AppId -ErrorAction SilentlyContinue -ErrorVariable ProcessError
+        if ($ProcessError -eq $null) {
+            Write-Host "Admin consent granted to the App Registration with AppId: $AppId"
+            break
+        }
+        # The application instance wasn't found, next attempt in 10 seconds
+        Start-Sleep -Seconds 10
+
+        $retryCount++
+        $interval = $WaitTime - ($retryCount * 10)
+        Write-Output "$($interval) seconds left to complete the synchronization..."
+    }until ($retryCount -eq $retries)
+}
+
+
 testParams
 
 ##################################
@@ -68,14 +99,15 @@ testParams
 Write-Host "$Comment Begin $title Azure App Registration"
 
 $identifierApi = New-Guid
-$displayAppName = "$applicationName $title $environment $deploymentId"
+$projectName = (Get-Culture).TextInfo.ToTitleCase(($applicationName -Replace '[^0-9A-Z]', ' '))
+$displayAppName = $projectName + ' ' + $title + ' ' + $environment.ToUpper() + ' ' + $deploymentId
 $app = $applicationName.ToLower().Replace(" ", "-")
 $env = $environment.ToLower()
 $identifierUrlApi = "api://$app-$env/" + $identifierApi
 
 
 Write-Host "$Comment Creating App Registration for $displayAppName with identifierUrlApi: $identifierUrlApi"
-Write-Host "Required permission Ids can be found here: $Comment https://learn.microsoft.com/en-us/graph/permissions-reference#all-permissions-and-ids"
+
 $appRegistration = az ad app create `
 	--display-name $displayAppName `
     --enable-access-token-issuance true `
@@ -260,6 +292,16 @@ Write-Host "$Comment Adding client secret with 2 years expiration."
 $clientsecretname="apiSecret"
 $clientsecretduration=2
 $clientsecret=$(az ad app credential reset --id $appRegistrationResultObjectId --append --display-name $clientsecretname --years $clientsecretduration --query password --output tsv)
+
+if($waitTime -gt 0)
+{
+    Write-Host "$Comment Wait for $waitTime seconds for a new App Registration to be committed before granting admin consent to the App Registration"
+    Start-Sleep -Seconds $waitTime
+    # Grant admin consent to the App Registration
+    Write-Host "$Comment Granting admin consent to the App Registration"
+    az ad app permission admin-consent --id $appRegistrationResultAppId
+}
+# GrantAdminConsentWaitForCompletion -AppId $appRegistrationResultAppId -WaitTime 60
 
 ### Return the App Registration object
 Write-Host "$Comment Returning the App Registration object"
